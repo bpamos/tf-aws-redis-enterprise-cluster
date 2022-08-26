@@ -1,0 +1,108 @@
+
+# User Input Required 
+
+# User Input Required
+# Access key and Secret key for aws account [AWS_ACCESS_KEY, AWS_SECRET_KEY] 
+aws_creds = ["",""]
+
+# User Input Required
+# name of ssh key to be added to instance (AWS key pair name)
+ssh_key_name = ""
+
+# User Input Required
+# DNS hosted zone id (find value in R53 hosted zones)
+dns_hosted_zone_id = ""
+
+# Owner
+# Owner tag name of resources
+owner = ""
+
+# User Input Optional (Default values provided otherwise)
+# uncomment out variables and input values to overide defaults
+
+# AWS Region (default = "us-east-1")
+##region = ""
+
+# Base Name of Resources 
+# (Resource prefix for all generated resources)
+# default = "redisuser1-tf"
+##base_name = ""
+
+# Subnet CIDR Block (default = "10.0.0.0/24")
+##subnet_cidr_block = ""
+
+# Subnet AZ (default = "us-east-1a")
+##subnet_az = ""
+
+# Memtier Instance
+
+# Linux ami for Memtier Instance 
+##linux_ami = ""
+
+# instance type to use for memtier instance
+# (default = "t3.micro")
+##instance_type = ""
+
+# redis enterpise software instance ami
+# you need to search aws marketplace, select the region, and grab ami id.
+# https://aws.amazon.com/marketplace/server/configuration?productId=412acaa0-2074-4156-93a4-576366bbf396&ref_=psb_cfg_continue
+##rs_instance_ami = ""
+
+# redis enterprise software instance type
+# default = "t2.xlarge"
+##rs_instance_type = ""
+
+# EBS volume for persistent and ephemeral storage
+# default = "150"
+##rs-volume-size = ""
+
+# cluster username and password
+
+# RE cluster username (default = "demo@redislabs.com")
+##re_cluster_username = ""
+
+# RE cluster password (default = "123456")
+##re_cluster_password = ""
+
+# memtier commands
+# first data input script into redis db.
+##memtier_data_input_1 = "memtier_benchmark -x 3 -n 180000 -c 1 -t 1 --ratio=1:0 --data-size=80 --key-maximum=180000 --pipeline=1000 --key-pattern=S:S --hide-histogram"
+
+# first memtier benchmark
+##memtier_benchmark_1 = "memtier_benchmark -x 2 -t 8 -c 100 -n 100 --ratio=1:10000 --data-size=80 --key-maximum=180000 --hide-histogram"
+
+# Memtier Benchmark outfile json (sent to s3)
+##outfile_name_1 = "mybenchmarkOutfile.json"
+
+# create Redis Enterprise db
+
+# name of redis db
+##redis_db_name_1 = "myDB"
+
+# memory size (bytes)
+##redis_db_memory_size_1 = 1000000000
+
+# replication (true,false)
+##redis_db_replication_1 = "false"
+
+# Cluster mode (server side sharding). 
+# When true, shard hashing rules must be provided by either oss_sharding or shard_key_regex
+##redis_db_sharding_1  = "false"
+
+# shard count (	Number of database server-side shards)
+##redis_db_shard_count_1 = 1
+
+# proxy policy (OPTIONS)
+##redis_db_proxy_policy_1 = "single"
+
+# shard placement (OPTIONS)
+##redis_db_shards_placement_1 = "dense"
+
+# data persistence (OPTIONS)
+##redis_db_data_persistence_1 = "aof"
+
+# aof policy (OPTIONS) 'appendfsync-every-sec' "appendfsync-always"
+##redis_db_aof_policy_1 = "appendfsync-every-sec"
+
+# db port (create as random numbers)
+##redis_db_port = 10000
