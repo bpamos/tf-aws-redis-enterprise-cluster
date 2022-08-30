@@ -50,11 +50,11 @@ owner = ""
 
 # redis enterprise software instance type
 # default = "t2.xlarge"
-##rs_instance_type = ""
+##re_instance_type = ""
 
 # EBS volume for persistent and ephemeral storage
 # default = "150"
-##rs-volume-size = ""
+##re-volume-size = ""
 
 # cluster username and password
 

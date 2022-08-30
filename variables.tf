@@ -90,13 +90,25 @@ variable "ena-support" {
   default     = true
 }
 
-variable "rs_instance_type" {
-    description = "rs instance type"
+variable "re_instance_type" {
+    description = "re instance type"
     default     = "t2.xlarge"
 }
 
+variable "node-root-size" {
+  description = "The size of the root volume"
+  default     = "50"
+}
+
 # EBS volume for persistent and ephemeral storage
-variable "rs-volume-size" {
+
+### must import "local variable to use this"
+# variable "enable-volumes" {
+#   description = "Enable EBS Devices for Ephemeral and Persistent storage"
+#   default     = true
+# }
+
+variable "re-volume-size" {
   description = "The size of the ephemeral and persistent volumes to attach"
   default     = "150"
 }
