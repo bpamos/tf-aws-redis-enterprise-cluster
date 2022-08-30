@@ -1,20 +1,20 @@
 # Resource: aws_instance (provides aws instances)
 # Create your aws instances, 
 # 1 memtier instance with a template file of variables for commands to run after instance creation.
-# 3 Redis Enterprise marketplace instances (with RS installed)
+# 3 Redis Enterprise marketplace instances (with re installed)
 # Redis Enterprise Cluster Instances
 
 # create Redis Enterprise cluster instance (requires ami)
-resource "aws_instance" "rs_cluster_instance_1" {
+resource "aws_instance" "re_cluster_instance" {
   count                       = var.data-node-count
   ami                         = data.aws_ami.re-ami.id
   associate_public_ip_address = true
-  #subnet_id                   = aws_subnet.re_subnet.id
-  availability_zone      = element(var.subnet_azs, count.index)
-  subnet_id              = element([aws_subnet.re_subnet1.id,aws_subnet.re_subnet2.id,aws_subnet.re_subnet3.id], count.index)
-  instance_type               = var.rs_instance_type
+  availability_zone           = element(var.subnet_azs, count.index)
+  subnet_id                   = element([aws_subnet.re_subnet1.id,aws_subnet.re_subnet2.id,aws_subnet.re_subnet3.id], count.index)
+  instance_type               = var.re_instance_type
   key_name                    = var.ssh_key_name
   vpc_security_group_ids      = [ aws_security_group.re_sg.id ]
+  root_block_device             { volume_size = var.node-root-size }
 
   tags = {
     Name = format("%s-%s-node-%s", var.base_name, var.region,count.index),
@@ -24,9 +24,10 @@ resource "aws_instance" "rs_cluster_instance_1" {
 
 # Elastic IP association
 
-# associate aws eips created in "aws_eip.tf" to each instance
-# resource "aws_eip_association" "rs-eip-assoc-1" {
-#   instance_id   = aws_instance.rs_cluster_instance_1.id
-#   allocation_id = aws_eip.rs_cluster_instance_1.id
-#   depends_on    = [aws_instance.rs_cluster_instance_1]
-# }
+#associate aws eips created in "aws_eip.tf" to each instance
+resource "aws_eip_association" "re-eip-assoc" {
+  count = var.data-node-count
+  instance_id   = element(aws_instance.re_cluster_instance.*.id, count.index)
+  allocation_id = element(aws_eip.re_cluster_instance_eip.*.id, count.index)
+  depends_on    = [aws_instance.re_cluster_instance, aws_eip.re_cluster_instance_eip]
+}
