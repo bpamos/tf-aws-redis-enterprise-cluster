@@ -3,39 +3,42 @@
 # # TODO: create directories for both persistent and ephemeral storage in each node.
 
 
-# # Attach Persistent Volumes
-# # Instance 1
-# resource "aws_ebs_volume" "persistent_rs_cluster_instance_1" {
-#   availability_zone = var.subnet_az
-#   size              = var.rs-volume-size
+# Attach Ephemeral Volumes
+# Instance 1
+resource "aws_ebs_volume" "ephemeral_re_cluster_instance" {
+  count             = var.data-node-count
+  availability_zone = element(var.subnet_azs, count.index)
+  size              = var.re-volume-size
 
-#   tags = {
-#     Name = format("%s-%s-ec2-1-persistent", var.base_name, var.region),
-#     Owner = var.owner
-#   }
-# }
+  tags = {
+    Name = format("%s-%s-ec2-%s-ephemeral", var.base_name, var.region, count.index),
+    Owner = var.owner
+  }
+}
 
-# resource "aws_volume_attachment" "persistent_rs_cluster_instance_1" {
-#   device_name = "/dev/sdj"
-#   volume_id   = aws_ebs_volume.persistent_rs_cluster_instance_1.id
-#   instance_id = aws_instance.rs_cluster_instance_1.id
-# }
+resource "aws_volume_attachment" "ephemeral_re_cluster_instance" {
+  count       = var.data-node-count
+  device_name = "/dev/sdh"
+  volume_id   = element(aws_ebs_volume.ephemeral_re_cluster_instance.*.id, count.index)
+  instance_id = element(aws_instance.re_cluster_instance.*.id, count.index)
+}
 
+# Attach Persistent Volumes
+# Instance 1
+resource "aws_ebs_volume" "persistent_re_cluster_instance" {
+  count             = var.data-node-count
+  availability_zone = element(var.subnet_azs, count.index)
+  size              = var.re-volume-size
 
-# # Attach Ephemeral Volumes
-# # Instance 1
-# resource "aws_ebs_volume" "ephemeral_rs_cluster_instance_1" {
-#   availability_zone = var.subnet_az
-#   size              = var.rs-volume-size
+  tags = {
+    Name = format("%s-%s-ec2-%s-persistent", var.base_name, var.region, count.index),
+    Owner = var.owner
+  }
+}
 
-#   tags = {
-#     Name = format("%s-%s-ec2-1-ephemeral", var.base_name, var.region),
-#     Owner = var.owner
-#   }
-# }
-
-# resource "aws_volume_attachment" "ephemeral_rs_cluster_instance_1" {
-#   device_name = "/dev/sdh"
-#   volume_id   = aws_ebs_volume.ephemeral_rs_cluster_instance_1.id
-#   instance_id = aws_instance.rs_cluster_instance_1.id
-# }
+resource "aws_volume_attachment" "persistent_re_cluster_instance" {
+  count       = var.data-node-count
+  device_name = "/dev/sdj"
+  volume_id   = element(aws_ebs_volume.persistent_re_cluster_instance.*.id, count.index)
+  instance_id = element(aws_instance.re_cluster_instance.*.id, count.index)
+}
