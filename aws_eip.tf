@@ -8,8 +8,18 @@ resource "aws_eip" "re_cluster_instance_eip" {
   vpc      = true
 
   tags = {
-      Name = format("%s-%s-eip-%s", var.base_name, var.region, count.index),
+      Name = format("%s-%s-eip-%s", var.base_name, var.region, count.index+1),
       Owner = var.owner
   }
 
+}
+
+# Elastic IP association
+
+#associate aws eips created in "aws_eip.tf" to each instance
+resource "aws_eip_association" "re-eip-assoc" {
+  count = var.data-node-count
+  instance_id   = element(aws_instance.re_cluster_instance.*.id, count.index)
+  allocation_id = element(aws_eip.re_cluster_instance_eip.*.id, count.index)
+  depends_on    = [aws_instance.re_cluster_instance, aws_eip.re_cluster_instance_eip]
 }
