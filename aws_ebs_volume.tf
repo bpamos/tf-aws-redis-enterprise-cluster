@@ -11,7 +11,7 @@ resource "aws_ebs_volume" "ephemeral_re_cluster_instance" {
   size              = var.re-volume-size
 
   tags = {
-    Name = format("%s-%s-ec2-%s-ephemeral", var.base_name, var.region, count.index),
+    Name = format("%s-%s-ec2-%s-ephemeral", var.base_name, var.region, count.index+1),
     Owner = var.owner
   }
 }
@@ -31,7 +31,7 @@ resource "aws_ebs_volume" "persistent_re_cluster_instance" {
   size              = var.re-volume-size
 
   tags = {
-    Name = format("%s-%s-ec2-%s-persistent", var.base_name, var.region, count.index),
+    Name = format("%s-%s-ec2-%s-persistent", var.base_name, var.region, count.index+1),
     Owner = var.owner
   }
 }
