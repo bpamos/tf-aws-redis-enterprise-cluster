@@ -27,3 +27,7 @@ output "data-node-eips" {
 output "data-node-internal-ips" {
   value = aws_instance.re_cluster_instance[*].private_ip
 }
+
+# output "testFile" {
+#   value = file(var.ssh_key_path)
+# }

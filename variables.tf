@@ -11,6 +11,10 @@ variable "ssh_key_name" {
     description = "name of ssh key to be added to instance"
 }
 
+variable "ssh_key_path" {
+    description = "name of ssh key to be added to instance"
+}
+
 variable "owner" {
     description = "owner tag name"
 }
@@ -112,6 +116,11 @@ variable "node-root-size" {
 #   description = "Enable EBS Devices for Ephemeral and Persistent storage"
 #   default     = true
 # }
+variable "enable-volumes" {
+  description = "Enable EBS Devices for Ephemeral and Persistent storage"
+  default     = true
+}
+
 
 variable "re-volume-size" {
   description = "The size of the ephemeral and persistent volumes to attach"

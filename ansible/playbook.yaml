@@ -1,0 +1,88 @@
+---
+
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+
+  pre_tasks:
+    - name: Load vars
+      include_vars: "{{ item }}"
+      with_first_found:
+        - "{{ ansible_hostname }}.yaml"
+        - "default.yaml"
+
+    - name: Update Apt Cache
+      apt: 
+        update_cache: yes
+    - name: Ubuntu Packages
+      package:
+        name: "{{ deb_packages }}"
+    - name: Stop systemd Resolver
+      systemd:
+        name: systemd-resolved
+        state: stopped
+        enabled: no
+    - name: Removing bad resolver
+      lineinfile: 
+        path: /etc/resolv.conf
+        regexp: 'nameserver\s+127\.0\.0\.53'
+        state: absent
+    - name: Adding known good resolver
+      lineinfile: 
+        path: /etc/resolv.conf
+        regexp: '^nameserver\s+1.1.1.1'
+        line: 'nameserver 1.1.1.1'
+        state: present
+
+    - name: create re home dir
+      file:
+        state: directory
+        path: "/redis"
+    - name: create ephemeral filesystem
+      filesystem:
+        fstype: ext4
+        dev: "/dev/sdh"
+        #dev: "/dev/nvme1n1"
+      when: enable_volumes
+    - name: mount ephemeral dir filesystem
+      mount:
+        name: /redis/ephemeral
+        #src: /dev/nvme1n1
+        src: /dev/sdh
+        fstype: ext4
+        state: mounted
+      when: enable_volumes
+    - name: create persistant filesystem
+      filesystem:
+        fstype: ext4
+        #dev: "/dev/nvme2n1"
+        dev: "/dev/sdj"
+      when: enable_volumes
+    - name: mount persistant dir filesystem
+      mount:
+        name: /redis/persistant
+        #src: /dev/nvme2n1
+        src: /dev/sdj
+        fstype: ext4
+        state: mounted
+      when: enable_volumes
+
+  tasks:
+    - name: create download directory
+      file:
+        state: directory
+        path: "/var/tmp/re-download"
+    - name: Unarchive software
+      unarchive: 
+        src: "https://s3.amazonaws.com/redis-enterprise-software-downloads/6.2.12/redislabs-6.2.12-68-bionic-amd64.tar"
+
+        dest: /var/tmp/re-download
+        remote_src: yes
+    - name: Install the software
+      command: "./install.sh -y"
+      args:
+        chdir: /var/tmp/re-download
+        creates: /var/opt/redislabs/log/rlcheck.log

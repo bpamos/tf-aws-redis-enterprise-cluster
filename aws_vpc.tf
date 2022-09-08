@@ -13,6 +13,11 @@ resource "aws_vpc" "redis_cluster_vpc" {
   }
 }
 
+data "aws_vpc" "re-vpc-data" {
+  id = aws_vpc.redis_cluster_vpc.id
+}
+
+
 # Create private subnet
 resource "aws_subnet" "re_subnet1" {
   vpc_id     = aws_vpc.redis_cluster_vpc.id # requires the vpc id from the vpc resource
