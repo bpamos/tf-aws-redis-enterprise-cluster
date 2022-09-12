@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 
-locals {
-    ssh_user         = "ubuntu"
-    private_key_path = "~/desktop/keys/bamos-west2-ssh-aws.pem"
-}
+# locals {
+#     ssh_user         = "ubuntu"
+#     private_key_path = "~/desktop/keys/bamos-west2-ssh-aws.pem"
+# }

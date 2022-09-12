@@ -40,49 +40,23 @@ variable "subnet_cidr_blocks" {
     default = ["10.0.0.0/24","10.0.16.0/24","10.0.32.0/24"]
 }
 
-# variable "subnet_cidr_block1" {
-#     description = "subnet_cidr_block"
-#     default = "10.0.0.0/24"
-# }
-# variable "subnet_cidr_block2" {
-#     description = "subnet_cidr_block"
-#     default = "10.0.16.0/24"
-# }
-# variable "subnet_cidr_block3" {
-#     description = "subnet_cidr_block"
-#     default = "10.0.32.0/24"
-# }
-
 variable "subnet_azs" {
     type = list(any)
     description = "subnet availability zone"
     default = ["us-east-1a","us-east-1b","us-east-1c"]
 }
+# Test Instance Variables
 
-# variable "subnet_az1" {
-#     description = "subnet availability zone"
-#     default = "us-east-1a"
-# }
-# variable "subnet_az2" {
-#     description = "subnet availability zone"
-#     default = "us-east-1b"
-# }
-# variable "subnet_az3" {
-#     description = "subnet availability zone"
-#     default = "us-east-1c"
-# }
-
-# Memtier Instance Variables
-
-variable "linux_ami" {
-    description = "Linux ami to use"
-    default = "ami-038f1ca1bd58a5790"
+variable "test-node-count" {
+  description = "number of data nodes"
+  default     = 1
 }
 
-variable "instance_type" {
+variable "test_instance_type" {
     description = "instance type to use. Default: t3.micro"
     default = "t3.micro"
 }
+
 
 # Redis Enterprise Cluster Variables
 # redis enterpise software instance ami
