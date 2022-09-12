@@ -72,12 +72,11 @@ resource "null_resource" "ssh-setup-test" {
 resource "null_resource" "ansible_test_run" {
   count = var.test-node-count
   provisioner "local-exec" {
-    command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_test_node_${count.index}.ini --become -e 'ENABLE_VOLUMES=${var.enable-volumes}'"
+    #command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_test_node_${count.index}.ini --become -e 'ENABLE_VOLUMES=${var.enable-volumes}'"
+    command = "ansible-playbook -i $inventory_file ${path.module}/ansible/redislabs-create-cluster.yaml --private-key ${var.ssh_key_path} -e @$extra_vars -e @$group_vars"
   }
   depends_on = [null_resource.remote-config-test]
 }
-
-
 
 
 
