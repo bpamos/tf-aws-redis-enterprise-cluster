@@ -18,3 +18,16 @@
 # output "subnet_cidr_blocks_ids" {
 #     value = [aws_subnet.re_subnet1.id, aws_subnet.re_subnet2.id, aws_subnet.re_subnet3.id]
 # }
+
+
+output "data-node-eips" {
+  value = aws_eip.re_cluster_instance_eip[*].public_ip
+}
+
+output "data-node-internal-ips" {
+  value = aws_instance.re_cluster_instance[*].private_ip
+}
+
+# output "testFile" {
+#   value = file(var.ssh_key_path)
+# }

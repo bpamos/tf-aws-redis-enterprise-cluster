@@ -17,17 +17,27 @@ resource "aws_instance" "re_cluster_instance" {
   root_block_device             { volume_size = var.node-root-size }
 
   tags = {
-    Name = format("%s-%s-node-%s", var.base_name, var.region,count.index),
+    Name = format("%s-%s-node-%s", var.base_name, var.region,count.index+1),
     Owner = var.owner
   }
+
 }
 
-# Elastic IP association
+# create test node to run memtier benchmarks against cluster and create cluster via REST API.
+resource "aws_instance" "test_node" {
+  count                       = var.test-node-count
+  ami                         = data.aws_ami.re-ami.id
+  associate_public_ip_address = true
+  availability_zone           = element(var.subnet_azs, count.index)
+  subnet_id                   = element([aws_subnet.re_subnet1.id,aws_subnet.re_subnet2.id,aws_subnet.re_subnet3.id], count.index)
+  instance_type               = var.re_instance_type
+  key_name                    = var.ssh_key_name
+  vpc_security_group_ids      = [ aws_security_group.re_sg.id ]
+  source_dest_check           = false
 
-#associate aws eips created in "aws_eip.tf" to each instance
-resource "aws_eip_association" "re-eip-assoc" {
-  count = var.data-node-count
-  instance_id   = element(aws_instance.re_cluster_instance.*.id, count.index)
-  allocation_id = element(aws_eip.re_cluster_instance_eip.*.id, count.index)
-  depends_on    = [aws_instance.re_cluster_instance, aws_eip.re_cluster_instance_eip]
+  tags = {
+    Name = format("%s-%s-test-node-%s", var.base_name, var.region,count.index+1),
+    Owner = var.owner
+  }
+
 }

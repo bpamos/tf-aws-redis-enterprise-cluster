@@ -3,13 +3,20 @@
 
 # Create a VPC
 resource "aws_vpc" "redis_cluster_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block                  = var.vpc_cidr
+  enable_dns_support          = true
+  enable_dns_hostnames        = true
 
   tags = {
     Name = format("%s-%s-cluster-vpc", var.base_name, var.region),
     Owner = var.owner
   }
 }
+
+data "aws_vpc" "re-vpc-data" {
+  id = aws_vpc.redis_cluster_vpc.id
+}
+
 
 # Create private subnet
 resource "aws_subnet" "re_subnet1" {

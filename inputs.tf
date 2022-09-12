@@ -21,3 +21,13 @@ data "aws_ami" "re-ami" {
     values = [var.ena-support]
   }
 }
+
+
+# locals {
+#   ssh_key_path = (var.ssh-key == "" ? "~/.ssh/${var.vpc-name}.pem" : "~/.ssh/${replace(var.ssh-key, ".pem", "")}.pem")
+# }
+
+
+# locals {
+#   ssh_key = (var.ssh-key == "" ? var.vpc-name : replace(var.ssh-key, ".pem", ""))
+# }
