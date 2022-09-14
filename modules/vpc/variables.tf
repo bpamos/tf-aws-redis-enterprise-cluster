@@ -1,5 +1,6 @@
 variable "region" {
     description = "AWS region"
+    default = "us-east-1"
 }
 
 variable "aws_creds" {
@@ -31,3 +32,5 @@ variable "subnet_azs" {
     description = "subnet availability zone"
     default = ["us-east-1a","us-east-1b","us-east-1c"]
 }
+
+
