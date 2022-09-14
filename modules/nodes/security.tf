@@ -15,7 +15,7 @@
 resource "aws_security_group" "re_sg" {
   name        = format("%s-re-sg99", var.base_name)
   description = "Redis Enterprise Security Group"
-  vpc_id      = aws_vpc.redis_cluster_vpc.id
+  vpc_id      = var.vpc_id
   
   tags = {
     Name = format("%s-%s-cluster-sg", var.base_name, var.region),

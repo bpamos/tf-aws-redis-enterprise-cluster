@@ -17,9 +17,8 @@ resource "aws_route53_record" "A_record" {
   type    = "A"
   ttl     = "300"
   records = [
-            element(aws_eip.re_cluster_instance_eip[*].public_ip, count.index)
+            element(var.re-data-node-eips, count.index)
             ]
-  depends_on    = [aws_instance.re_cluster_instance]
 }
 
 

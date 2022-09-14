@@ -24,9 +24,8 @@ variable "vpc_cidr" {
     description = "vpc-cidr"
 }
 
-# DNS
-variable "dns_hosted_zone_id" {
-    description = "DNS hosted zone Id"
+variable "vpc_id" {
+  description = "The ID of the VPC"
 }
 
 variable "base_name" {
@@ -38,6 +37,11 @@ variable "subnet_cidr_blocks" {
     type = list(any)
     description = "subnet_cidr_block"
     default = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24"]
+}
+
+variable "vpc_subnets_ids" {
+  type        = list(any)
+  description = "The list of subnets available to the VPC"
 }
 
 variable "subnet_azs" {
