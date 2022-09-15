@@ -17,7 +17,7 @@ resource "aws_instance" "re_cluster_instance" {
   root_block_device             { volume_size = var.node-root-size }
 
   tags = {
-    Name = format("%s-%s-node-%s", var.base_name, var.region,count.index+1),
+    Name = format("%s-node-%s", var.vpc_name,count.index+1),
     Owner = var.owner
   }
 
@@ -36,7 +36,7 @@ resource "aws_instance" "test_node" {
   source_dest_check           = false
 
   tags = {
-    Name = format("%s-%s-test-node-%s", var.base_name, var.region,count.index+1),
+    Name = format("%s-test-node-%s", var.vpc_name,count.index+1),
     Owner = var.owner
   }
 

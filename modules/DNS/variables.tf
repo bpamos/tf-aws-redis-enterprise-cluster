@@ -10,10 +10,14 @@ variable "region" {
     default = "us-east-1"
 }
 
-variable "base_name" {
-    description = "base name for resources"
-    default = "redisuser1-tf"
+variable "vpc_name" {
+  description = "The VPC Name tag"
 }
+
+# variable "base_name" {
+#     description = "base name for resources"
+#     default = "redisuser1-tf"
+# }
 
 variable "data-node-count" {
   description = "number of data nodes"

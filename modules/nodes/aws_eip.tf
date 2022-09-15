@@ -9,7 +9,7 @@ resource "aws_eip" "re_cluster_instance_eip" {
   vpc      = true
 
   tags = {
-      Name = format("%s-%s-eip-%s", var.base_name, var.region, count.index+1),
+      Name = format("%s-eip-%s", var.vpc_name, count.index+1),
       Owner = var.owner
   }
 
@@ -31,7 +31,7 @@ resource "aws_eip" "test_node_eip" {
   vpc      = true
 
   tags = {
-      Name = format("%s-%s-test-eip-%s", var.base_name, var.region, count.index+1),
+      Name = format("%s-test-eip-%s", var.vpc_name, count.index+1),
       Owner = var.owner
   }
 

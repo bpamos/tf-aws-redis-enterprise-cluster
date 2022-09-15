@@ -90,10 +90,10 @@ variable "node-root-size" {
 #   description = "Enable EBS Devices for Ephemeral and Persistent storage"
 #   default     = true
 # }
-variable "enable-volumes" {
-  description = "Enable EBS Devices for Ephemeral and Persistent storage"
-  default     = true
-}
+# variable "enable-volumes" {
+#   description = "Enable EBS Devices for Ephemeral and Persistent storage"
+#   default     = true
+# }
 
 
 variable "re-volume-size" {

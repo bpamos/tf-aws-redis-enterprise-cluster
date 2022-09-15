@@ -28,10 +28,14 @@ variable "vpc_id" {
   description = "The ID of the VPC"
 }
 
-variable "base_name" {
-    description = "base name for resources"
-    default = "redisuser1-tf"
+variable "vpc_name" {
+  description = "The VPC Project Name tag"
 }
+
+# variable "base_name" {
+#     description = "base name for resources"
+#     default = "redisuser1-tf"
+# }
 
 variable "subnet_cidr_blocks" {
     type = list(any)
@@ -94,10 +98,10 @@ variable "node-root-size" {
 #   description = "Enable EBS Devices for Ephemeral and Persistent storage"
 #   default     = true
 # }
-variable "enable-volumes" {
-  description = "Enable EBS Devices for Ephemeral and Persistent storage"
-  default     = true
-}
+# variable "enable-volumes" {
+#   description = "Enable EBS Devices for Ephemeral and Persistent storage"
+#   default     = true
+# }
 
 
 variable "re-volume-size" {
