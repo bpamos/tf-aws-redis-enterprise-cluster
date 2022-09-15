@@ -79,7 +79,8 @@ resource "null_resource" "ssh-setup" {
 resource "null_resource" "ansible-run" {
   count = var.data-node-count
   provisioner "local-exec" {
-    command = "ansible-playbook ${path.module}/ansible/playbook.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_node_${count.index}.ini --become -e 'ENABLE_VOLUMES=${var.enable-volumes}'"
+    #command = "ansible-playbook ${path.module}/ansible/playbook.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_node_${count.index}.ini --become -e 'ENABLE_VOLUMES=${var.enable-volumes}'"
+    command = "ansible-playbook ${path.module}/ansible/playbook.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_node_${count.index}.ini"
     }
   depends_on = [null_resource.remote-config]
 }
