@@ -29,13 +29,12 @@ output "vpc_name" {
 ########### Node Module
 module "nodes" {
     source = "./modules/nodes"
-    aws_creds = var.aws_creds
+    #aws_creds = var.aws_creds
     owner = var.owner
     region = var.region
     #base_name = var.base_name
-    vpc_name = module.vpc.vpc-name
     vpc_cidr = var.vpc_cidr
-    subnet_cidr_blocks = var.subnet_cidr_blocks
+    #subnet_cidr_blocks = var.subnet_cidr_blocks
     subnet_azs = var.subnet_azs
     # Node required
     ssh_key_name = var.ssh_key_name
@@ -51,6 +50,7 @@ module "nodes" {
     # from vpc module outputs (these do not need to be varibles in the variables.tf outside the modules folders
     # since they are refrenced from the other module, but they need to be variables 
     # in the variables.tf inside the nodes module folder )
+    vpc_name = module.vpc.vpc-name
     vpc_subnets_ids = module.vpc.subnet-ids
     vpc_id = module.vpc.vpc-id
 }
@@ -64,10 +64,10 @@ output "re-data-node-eips" {
 ########### DNS Module
 module "DNS" {
     source = "./modules/DNS"
-    region = var.region
-    vpc_name = module.vpc.vpc-name
+    #region = var.region
     #base_name = var.base_name
     dns_hosted_zone_id = var.dns_hosted_zone_id
     data-node-count = var.data-node-count
+    vpc_name = module.vpc.vpc-name
     re-data-node-eips = module.nodes.re-data-node-eips
 }

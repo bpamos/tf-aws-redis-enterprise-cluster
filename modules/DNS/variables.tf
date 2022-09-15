@@ -5,10 +5,10 @@ variable "dns_hosted_zone_id" {
     description = "DNS hosted zone Id"
 }
 
-variable "region" {
-    description = "AWS region"
-    default = "us-east-1"
-}
+# variable "region" {
+#     description = "AWS region"
+#     default = "us-east-1"
+# }
 
 variable "vpc_name" {
   description = "The VPC Name tag"

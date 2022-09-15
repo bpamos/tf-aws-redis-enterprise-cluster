@@ -78,5 +78,13 @@ resource "null_resource" "ansible_test_run" {
   depends_on = [null_resource.remote-config-test]
 }
 
+# resource "null_resource" "ansible_test_run" {
+#   count = var.test-node-count
+#   provisioner "local-exec" {
+#     #command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_test_node_${count.index}.ini"
+#     command = "ansible-playbook -i $inventory_file ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -e @$extra_vars -e @$group_vars"
+#   }
+#   depends_on = [null_resource.remote-config-test, null_resource.ansible_test_run]
+# }
 
 
