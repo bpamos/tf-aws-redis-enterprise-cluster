@@ -23,21 +23,21 @@ resource "aws_instance" "re_cluster_instance" {
 
 }
 
-# create test node to run memtier benchmarks against cluster and create cluster via REST API.
-resource "aws_instance" "test_node" {
-  count                       = var.test-node-count
-  ami                         = data.aws_ami.re-ami.id
-  associate_public_ip_address = true
-  availability_zone           = element(var.subnet_azs, count.index)
-  subnet_id                   = element(var.vpc_subnets_ids, count.index)
-  instance_type               = var.test_instance_type
-  key_name                    = var.ssh_key_name
-  vpc_security_group_ids      = [ aws_security_group.re_sg.id ]
-  source_dest_check           = false
+# # create test node to run memtier benchmarks against cluster and create cluster via REST API.
+# resource "aws_instance" "test_node" {
+#   count                       = var.test-node-count
+#   ami                         = data.aws_ami.re-ami.id
+#   associate_public_ip_address = true
+#   availability_zone           = element(var.subnet_azs, count.index)
+#   subnet_id                   = element(var.vpc_subnets_ids, count.index)
+#   instance_type               = var.test_instance_type
+#   key_name                    = var.ssh_key_name
+#   vpc_security_group_ids      = [ aws_security_group.re_sg.id ]
+#   source_dest_check           = false
 
-  tags = {
-    Name = format("%s-test-node-%s", var.vpc_name,count.index+1),
-    Owner = var.owner
-  }
+#   tags = {
+#     Name = format("%s-test-node-%s", var.vpc_name,count.index+1),
+#     Owner = var.owner
+#   }
 
-}
+# }

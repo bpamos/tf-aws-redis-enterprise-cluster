@@ -31,17 +31,6 @@ variable "vpc_name" {
   description = "The VPC Project Name tag"
 }
 
-# variable "base_name" {
-#     description = "base name for resources"
-#     default = "redisuser1-tf"
-# }
-
-# variable "subnet_cidr_blocks" {
-#     type = list(any)
-#     description = "subnet_cidr_block"
-#     default = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24"]
-# }
-
 variable "vpc_subnets_ids" {
   type        = list(any)
   description = "The list of subnets available to the VPC"
@@ -54,58 +43,20 @@ variable "subnet_azs" {
 }
 # Test Instance Variables
 
-# variable "test-node-count" {
-#   description = "number of data nodes"
-#   default     = 1
-# }
-
-# variable "test_instance_type" {
-#     description = "instance type to use. Default: t3.micro"
-#     default = "t3.micro"
-# }
-
-
-# Redis Enterprise Cluster Variables
-# redis enterpise software instance ami
-# you need to search aws marketplace, select the region, and grab ami id.
-# https://aws.amazon.com/marketplace/server/configuration?productId=412acaa0-2074-4156-93a4-576366bbf396&ref_=psb_cfg_continue
-
-variable "data-node-count" {
+variable "test-node-count" {
   description = "number of data nodes"
-  default     = 3
+  default     = 1
 }
+
+variable "test_instance_type" {
+    description = "instance type to use. Default: t3.micro"
+    default = "t3.micro"
+}
+
 
 variable "ena-support" {
   description = "choose AMIs that have ENA support enabled"
   default     = true
-}
-
-variable "re_instance_type" {
-    description = "re instance type"
-    default     = "t2.xlarge"
-}
-
-variable "node-root-size" {
-  description = "The size of the root volume"
-  default     = "50"
-}
-
-# EBS volume for persistent and ephemeral storage
-
-### must import "local variable to use this"
-# variable "enable-volumes" {
-#   description = "Enable EBS Devices for Ephemeral and Persistent storage"
-#   default     = true
-# }
-# variable "enable-volumes" {
-#   description = "Enable EBS Devices for Ephemeral and Persistent storage"
-#   default     = true
-# }
-
-
-variable "re-volume-size" {
-  description = "The size of the ephemeral and persistent volumes to attach"
-  default     = "150"
 }
 
 #### Security
