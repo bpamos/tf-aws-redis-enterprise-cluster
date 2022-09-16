@@ -24,7 +24,7 @@ output "re-data-node-eips" {
   value = aws_eip.re_cluster_instance_eip[*].public_ip
 }
 
-output "data-node-internal-ips" {
+output "re-data-node-internal-ips" {
   value = aws_instance.re_cluster_instance[*].private_ip
 }
 

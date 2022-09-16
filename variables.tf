@@ -316,3 +316,108 @@ variable "external-rules" {
     }
   ]
 }
+
+### OTHER
+
+variable "dns_fdnq" {
+    description = "."
+    default = ""
+}
+
+variable "node_1_private_ip" {
+    description = "."
+    default = ""
+}
+
+variable "node_2_private_ip" {
+    description = "."
+    default = ""
+}
+
+variable "node_3_private_ip" {
+    description = "."
+    default = ""
+}
+
+variable "node_1_external_ip" {
+    description = "."
+    default = ""
+}
+
+variable "node_2_external_ip" {
+    description = "."
+    default = ""
+}
+
+variable "node_3_external_ip" {
+    description = "."
+    default = ""
+}
+
+
+##############################
+
+
+# cluster commands
+
+variable "re_cluster_username" {
+    description = "redis enterprise cluster username"
+    default     = "demo@redislabs.com"
+}
+
+variable "re_cluster_password" {
+    description = "redis enterprise cluster password"
+    default     = "123456"
+}
+
+# cluster db commands
+
+variable "redis_db_name_1" {
+    description = "redis enterprise db "
+    default     = "myDB"
+}
+
+variable "redis_db_memory_size_1" {
+    description = "redis enterprise db "
+    default     = 100000000
+}
+
+variable "redis_db_replication_1" {
+    description = "redis enterprise db "
+    default     = "true"
+}
+
+variable "redis_db_sharding_1" {
+    description = "redis enterprise db "
+    default     = "false"
+}
+
+variable "redis_db_shard_count_1" {
+    description = "redis enterprise db "
+    default     = 1
+}
+
+variable "redis_db_proxy_policy_1" {
+    description = "redis enterprise db "
+    default     = "single"
+}
+
+variable "redis_db_shards_placement_1" {
+    description = "redis enterprise db "
+    default     = "dense"
+}
+
+variable "redis_db_data_persistence_1" {
+    description = "redis enterprise db "
+    default     = "aof"
+}
+
+variable "redis_db_aof_policy_1" {
+    description = "redis enterprise db "
+    default     = "appendfsync-always"
+}
+
+variable "redis_db_port" {
+    description = "redis enterprise db "
+    default     = 10000
+}
