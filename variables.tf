@@ -368,6 +368,38 @@ variable "node_3_public_dns" {
     default = ""
 }
 
+variable "re-node-internal-ips" {
+    type = list
+    description = "."
+    default = []
+}
+
+variable "re-node-eip-ips" {
+    type = list
+    description = "."
+    default = []
+}
+
+variable "re-node-public-dns" {
+    type = list
+    description = "."
+    default = []
+}
+
+# variable "re-data-node-info" {
+#     type = map(object({
+#         dns = string
+#         eip = string
+#         internal-ip = string
+#     }))
+#     description = "."
+#     default = {}
+# }
+variable "re-data-node-info" {
+    type = list
+    description = "."
+    default = []
+}
 
 # ##############################
 

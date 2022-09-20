@@ -69,9 +69,13 @@ output "re-data-node-public-dns" {
   value = module.nodes.re-data-node-public-dns
 }
 
-output "test-node-eips" {
-  value = module.nodes.test-node-eips
+output "re-data-node-info" {
+  value = module.nodes.re-data-node-info
 }
+
+# output "test-node-eips" {
+#   value = module.nodes.test-node-eips
+# }
 
 ########### DNS Module
 module "dns" {
@@ -94,16 +98,20 @@ module "create-cluster" {
   source = "./modules/re-cluster"
   ssh_key_path = var.ssh_key_path
   region = var.region
+  re-data-node-info    = module.nodes.re-data-node-info
+  re-node-internal-ips = module.nodes.re-data-node-internal-ips
+  re-node-eip-ips = module.nodes.re-data-node-eips
+  re-node-public-dns = module.nodes.re-data-node-public-dns
   dns_fqdn             = module.dns.dns-ns-record-name
-  node_1_private_ip    = module.nodes.re-data-node-internal-ips[0]
-  node_1_external_ip   = module.nodes.re-data-node-eips[0]
-  node_1_public_dns    = module.nodes.re-data-node-public-dns[0]
-  node_2_private_ip    = module.nodes.re-data-node-internal-ips[1]
-  node_2_external_ip   = module.nodes.re-data-node-eips[1]
-  node_2_public_dns    = module.nodes.re-data-node-public-dns[1]
-  node_3_private_ip    = module.nodes.re-data-node-internal-ips[2]
-  node_3_external_ip   = module.nodes.re-data-node-eips[2]
-  node_3_public_dns    = module.nodes.re-data-node-public-dns[2]
+  # node_1_private_ip    = module.nodes.re-data-node-internal-ips[0]
+  # node_1_external_ip   = module.nodes.re-data-node-eips[0]
+  # node_1_public_dns    = module.nodes.re-data-node-public-dns[0]
+  # node_2_private_ip    = module.nodes.re-data-node-internal-ips[1]
+  # node_2_external_ip   = module.nodes.re-data-node-eips[1]
+  # node_2_public_dns    = module.nodes.re-data-node-public-dns[1]
+  # node_3_private_ip    = module.nodes.re-data-node-internal-ips[2]
+  # node_3_external_ip   = module.nodes.re-data-node-eips[2]
+  # node_3_public_dns    = module.nodes.re-data-node-public-dns[2]
   re_cluster_username             = var.re_cluster_username
   re_cluster_password             = var.re_cluster_password
   
