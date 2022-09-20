@@ -1,6 +1,5 @@
 variable "region" {
     description = "AWS region"
-    default = "us-east-1"
 }
 
 variable "aws_creds" {
@@ -317,9 +316,9 @@ variable "external-rules" {
   ]
 }
 
-### OTHER
+# ### OTHER
 
-variable "dns_fdnq" {
+variable "dns_fqdn" {
     description = "."
     default = ""
 }
@@ -354,70 +353,85 @@ variable "node_3_external_ip" {
     default = ""
 }
 
+variable "node_1_public_dns" {
+    description = "."
+    default = ""
+}
 
-##############################
+variable "node_2_public_dns" {
+    description = "."
+    default = ""
+}
+
+variable "node_3_public_dns" {
+    description = "."
+    default = ""
+}
 
 
-# cluster commands
+# ##############################
+
+
+# # cluster commands
 
 variable "re_cluster_username" {
     description = "redis enterprise cluster username"
-    default     = "demo@redislabs.com"
+    default     = "admin@admin.com"
 }
 
 variable "re_cluster_password" {
     description = "redis enterprise cluster password"
-    default     = "123456"
+    default     = "admin"
 }
 
-# cluster db commands
+# # cluster db commands
 
-variable "redis_db_name_1" {
-    description = "redis enterprise db "
-    default     = "myDB"
-}
+# variable "redis_db_name_1" {
+#     description = "redis enterprise db "
+#     default     = "myDB"
+# }
 
-variable "redis_db_memory_size_1" {
-    description = "redis enterprise db "
-    default     = 100000000
-}
+# variable "redis_db_memory_size_1" {
+#     description = "redis enterprise db "
+#     default     = 100000000
+# }
 
-variable "redis_db_replication_1" {
-    description = "redis enterprise db "
-    default     = "true"
-}
+# variable "redis_db_replication_1" {
+#     description = "redis enterprise db "
+#     default     = "true"
+# }
 
-variable "redis_db_sharding_1" {
-    description = "redis enterprise db "
-    default     = "false"
-}
+# variable "redis_db_sharding_1" {
+#     description = "redis enterprise db "
+#     default     = "false"
+# }
 
-variable "redis_db_shard_count_1" {
-    description = "redis enterprise db "
-    default     = 1
-}
+# variable "redis_db_shard_count_1" {
+#     description = "redis enterprise db "
+#     default     = 1
+# }
 
-variable "redis_db_proxy_policy_1" {
-    description = "redis enterprise db "
-    default     = "single"
-}
+# variable "redis_db_proxy_policy_1" {
+#     description = "redis enterprise db "
+#     default     = "single"
+# }
 
-variable "redis_db_shards_placement_1" {
-    description = "redis enterprise db "
-    default     = "dense"
-}
+# variable "redis_db_shards_placement_1" {
+#     description = "redis enterprise db "
+#     default     = "dense"
+# }
 
-variable "redis_db_data_persistence_1" {
-    description = "redis enterprise db "
-    default     = "aof"
-}
+# variable "redis_db_data_persistence_1" {
+#     description = "redis enterprise db "
+#     default     = "aof"
+# }
 
-variable "redis_db_aof_policy_1" {
-    description = "redis enterprise db "
-    default     = "appendfsync-always"
-}
+# variable "redis_db_aof_policy_1" {
+#     description = "redis enterprise db "
+#     default     = "appendfsync-always"
+# }
 
-variable "redis_db_port" {
-    description = "redis enterprise db "
-    default     = 10000
-}
+# variable "redis_db_port" {
+#     description = "redis enterprise db "
+#     default     = 10000
+# }

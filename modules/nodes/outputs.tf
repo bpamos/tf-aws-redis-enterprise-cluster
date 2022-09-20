@@ -28,6 +28,10 @@ output "re-data-node-internal-ips" {
   value = aws_instance.re_cluster_instance[*].private_ip
 }
 
+output "re-data-node-public-dns" {
+  value = aws_instance.re_cluster_instance[*].public_dns
+}
+
 # output "test-node-eips" {
 #   value = aws_eip.test_node_eip[*].public_ip
 # }
