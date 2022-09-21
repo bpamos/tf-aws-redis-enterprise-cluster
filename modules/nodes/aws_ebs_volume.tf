@@ -1,7 +1,5 @@
 # # AWS EC2 instances are ephemeral, but your presistent database storage should not be.
 # # For each node in the cluste configure both persistent and ephemeral storage.
-# # TODO: create directories for both persistent and ephemeral storage in each node.
-
 
 # Attach Ephemeral Volumes
 # Instance 1
