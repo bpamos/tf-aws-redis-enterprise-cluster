@@ -36,7 +36,7 @@ data "template_file" "ansible_test_inventory" {
   template = "${file("${path.module}/inventory.tpl")}"
   vars = {
     host_ip  = element(aws_eip.test_node_eip.*.public_ip, count.index)
-    vpc_name = format("%s-%s-cluster-vpc", var.base_name, var.region)
+    vpc_name = var.vpc_name
     ncount   = count.index
   }
   depends_on = [aws_instance.test_node, aws_eip_association.test_eip_assoc]
@@ -45,7 +45,7 @@ data "template_file" "ansible_test_inventory" {
 data "template_file" "ssh_config_test" {
   template = "${file("${path.module}/ssh.tpl")}"
   vars = {
-    vpc_name = format("%s-%s-cluster-vpc", var.base_name, var.region)
+    vpc_name = var.vpc_name
   }
   depends_on = [aws_instance.test_node, aws_eip_association.test_eip_assoc]
 }
@@ -55,14 +55,14 @@ data "template_file" "ssh_config_test" {
 resource "null_resource" "inventory_setup_test" {
   count = var.test-node-count
   provisioner "local-exec" {
-    command = "echo \"${element(data.template_file.ansible_test_inventory.*.rendered, count.index)}\" > /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_test_node_${count.index}.ini"
+    command = "echo \"${element(data.template_file.ansible_test_inventory.*.rendered, count.index)}\" > /tmp/${var.vpc_name}_test_node_${count.index}.ini"
   }
   depends_on = [data.template_file.ansible_test_inventory]
 }
 
 resource "null_resource" "ssh-setup-test" {
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.ssh_config_test.rendered}\" > /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_test_node.cfg"
+    command = "echo \"${data.template_file.ssh_config_test.rendered}\" > /tmp/${var.vpc_name}_test_node.cfg"
   }
   depends_on = [data.template_file.ssh_config_test]
 }
@@ -72,11 +72,19 @@ resource "null_resource" "ssh-setup-test" {
 resource "null_resource" "ansible_test_run" {
   count = var.test-node-count
   provisioner "local-exec" {
-    #command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${format("%s-%s-cluster-vpc", var.base_name, var.region)}_test_node_${count.index}.ini --become -e 'ENABLE_VOLUMES=${var.enable-volumes}'"
-    command = "ansible-playbook -i $inventory_file ${path.module}/ansible/redislabs-create-cluster.yaml --private-key ${var.ssh_key_path} -e @$extra_vars -e @$group_vars"
+    command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_test_node_${count.index}.ini"
+    #command = "ansible-playbook -i $inventory_file ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -e @$extra_vars -e @$group_vars"
   }
   depends_on = [null_resource.remote-config-test]
 }
 
+# resource "null_resource" "ansible_test_run" {
+#   count = var.test-node-count
+#   provisioner "local-exec" {
+#     #command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_test_node_${count.index}.ini"
+#     command = "ansible-playbook -i $inventory_file ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -e @$extra_vars -e @$group_vars"
+#   }
+#   depends_on = [null_resource.remote-config-test, null_resource.ansible_test_run]
+# }
 
 

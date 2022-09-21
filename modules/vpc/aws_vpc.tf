@@ -9,6 +9,7 @@ resource "aws_vpc" "redis_cluster_vpc" {
 
   tags = {
     Name = format("%s-%s-cluster-vpc", var.base_name, var.region),
+    Project = format("%s-%s-cluster", var.base_name, var.region),
     Owner = var.owner
   }
 }
@@ -26,6 +27,7 @@ resource "aws_subnet" "re_subnet1" {
 
   tags = {
     Name = format("%s-subnet1", var.base_name),
+    Project = format("%s-%s-cluster", var.base_name, var.region),
     Owner = var.owner
   }
 }
@@ -37,6 +39,7 @@ resource "aws_subnet" "re_subnet2" {
 
   tags = {
     Name = format("%s-subnet2", var.base_name),
+    Project = format("%s-%s-cluster", var.base_name, var.region),
     Owner = var.owner
   }
 }
@@ -48,6 +51,7 @@ resource "aws_subnet" "re_subnet3" {
 
   tags = {
     Name = format("%s-subnet3", var.base_name),
+    Project = format("%s-%s-cluster", var.base_name, var.region),
     Owner = var.owner
   }
 }
@@ -58,6 +62,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.redis_cluster_vpc.id
   tags = {
       Name = format("%s-igw", var.base_name),
+      Project = format("%s-%s-cluster", var.base_name, var.region),
       Owner = var.owner
     }
 }
@@ -72,6 +77,7 @@ resource "aws_default_route_table" "route_table" {
     }
   tags = {
       Name = format("%s-rt", var.base_name),
+      Project = format("%s-%s-cluster", var.base_name, var.region),
       Owner = var.owner
     }
 }

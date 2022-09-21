@@ -13,13 +13,12 @@ data "aws_route53_zone" "selected" {
 resource "aws_route53_record" "A_record" {
   count   = var.data-node-count
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = format("node-%s.%s-%s.${data.aws_route53_zone.selected.name}", count.index+1, var.base_name, var.region)
+  name    = format("node-%s.%s.${data.aws_route53_zone.selected.name}", count.index+1, var.vpc_name)
   type    = "A"
   ttl     = "300"
   records = [
-            element(aws_eip.re_cluster_instance_eip[*].public_ip, count.index)
+            element(var.re-data-node-eips, count.index)
             ]
-  depends_on    = [aws_instance.re_cluster_instance]
 }
 
 
@@ -27,10 +26,10 @@ resource "aws_route53_record" "A_record" {
 #formatlist("ns%s.${var.cluster-prefix}.${var.zone-name}", range(1, length(var.node-external-ips) + 1))
 resource "aws_route53_record" "NS_record" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = format("%s-%s.${data.aws_route53_zone.selected.name}", var.base_name, var.region)
+  name    = format("%s.${data.aws_route53_zone.selected.name}", var.vpc_name)
   type    = "NS"
   ttl     = "300"
-  records = formatlist("node-%s.%s-%s.${data.aws_route53_zone.selected.name}", range(1, var.data-node-count + 1), var.base_name, var.region)
+  records = formatlist("node-%s.%s.${data.aws_route53_zone.selected.name}", range(1, var.data-node-count + 1), var.vpc_name)
 }
 #format("%s-%s-node-%s.${data.aws_route53_zone.selected.name}", var.base_name, var.region,count.index) length(["1","2","3"])
 #formatlist("%s-%s-node-%s.${data.aws_route53_zone.selected.name}", var.base_name, var.region, range(1, range(tostring(var.data-node-count))))
