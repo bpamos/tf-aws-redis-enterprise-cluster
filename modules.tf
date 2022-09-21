@@ -75,9 +75,10 @@ output "re-data-node-internal-ips" {
   value = module.nodes.re-data-node-internal-ips
 }
 
-output "re-data-node-public-dns" {
-  value = module.nodes.re-data-node-public-dns
+output "re-data-node-eip-public-dns" {
+  value = module.nodes.re-data-node-eip-public-dns
 }
+
 
 output "re-data-node-info" {
   value = module.nodes.re-data-node-info
@@ -112,7 +113,7 @@ module "create-cluster" {
   re-data-node-info    = module.nodes.re-data-node-info
   re-node-internal-ips = module.nodes.re-data-node-internal-ips
   re-node-eip-ips      = module.nodes.re-data-node-eips
-  re-node-public-dns   = module.nodes.re-data-node-public-dns
+  re-data-node-eip-public-dns   = module.nodes.re-data-node-eip-public-dns
   dns_fqdn             = module.dns.dns-ns-record-name
   re_cluster_username  = var.re_cluster_username
   re_cluster_password  = var.re_cluster_password

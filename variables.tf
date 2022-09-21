@@ -319,7 +319,7 @@ variable "re-node-eip-ips" {
     default = []
 }
 
-variable "re-node-public-dns" {
+variable "re-data-node-eip-public-dns" {
     type = list
     description = "."
     default = []
