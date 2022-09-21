@@ -1,55 +1,96 @@
 
 # Generate inventory file
 
-# resource "local_file" "inventory" {
-#     filename = "${path.module}/inventories/test-inventory.ini"
-#     content = <<EOF
-#     ${var.node_1_public_dns} internal_ip=${var.node_1_private_ip} external_ip=${var.node_1_external_ip}
-#     ${var.node_2_public_dns} internal_ip=${var.node_2_private_ip} external_ip=${var.node_2_external_ip}
-#     ${var.node_3_public_dns} internal_ip=${var.node_3_private_ip} external_ip=${var.node_3_external_ip}
-# EOF
-# }
+#### Sleeper, just to make sure nodes module is complete and everything is installed
 resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
 }
 
-
-resource "local_file" "inventory" {
-  filename = "${path.module}/inventories/test-inventory.ini"
-  content = <<-EOT
-    %{ for ip in var.re-data-node-info ~}
-    ${ip}
-    %{ endfor ~}
-  EOT
-}
-
-# Generate extra vars yaml file
-resource "local_file" "extra_vars" {
-    filename = "${path.module}/extra_vars/test-inventory.yaml"
-    content = <<EOF
-    ansible_user: ubuntu
-    cluster_name: ${var.dns_fqdn}
-    username: ${var.re_cluster_username}
-    password: ${var.re_cluster_password}
-    email_from: admin@domain.tld
-    smtp_host: smtp.domain.tld
-EOF
-}
-
+#### SSH config
 # data "template_file" "ssh_config" {
-#   template = "${file("${path.module}/extra_vars/inventory.tpl")}"
+#   template = "${file("${path.module}/ssh.tpl")}"
 #   vars = {
+#     vpc_name = "ansible"
+#   }
+#   depends_on = [time_sleep.wait_30_seconds]
+# }
+
+# resource "null_resource" "ssh-setup" {
+#   provisioner "local-exec" {
+#     command = "echo \"${data.template_file.ssh_config.rendered}\" > /tmp/ansible_node.cfg"
+#   }
+#   depends_on = [data.template_file.ssh_config]
+# }
+
+locals {
+  dynamic_inventory_ini = templatefile("${path.module}/inventories/test-inventory.tpl",
+  {
+    re-data-node-info = var.re-data-node-info
+  })
+}
+
+# Template Write
+resource "null_resource" "dynamic_inventory_ini" {
+  provisioner "local-exec" {
+    command = "echo \"${local.dynamic_inventory_ini}\" > ${path.module}/inventories/test-inventory.ini"
+  }
+  depends_on = [local.dynamic_inventory_ini]
+}
+
+##### extra_vars template and file
+locals {
+  extra_vars = templatefile("${path.module}/extra_vars/inventory.yaml.tpl",
+  {
+    ansible_user = "ubuntu"
+    dns_fqdn= var.dns_fqdn
+    re_cluster_username= var.re_cluster_username
+    re_cluster_password= var.re_cluster_password
+    re_email_from = "admin@domain.tld"
+    re_smtp_host = "smtp.domain.tld"
+  })
+}
+
+# Template Write
+resource "null_resource" "extra_vars" {
+  provisioner "local-exec" {
+    command = "echo \"${local.extra_vars}\" > ${path.module}/extra_vars/test-inventory.yaml"
+  }
+  depends_on = [local.extra_vars]
+}
+
+##################
+
+##### extra_vars files
+# data "template_file" "extra_vars" {
+#   template = "${file("${path.module}/extra_vars/inventory.yaml.tpl")}"
+#   vars = {
+#     ansible_user = "ubuntu"
 #     dns_fqdn= var.dns_fqdn
 #     re_cluster_username= var.re_cluster_username
 #     re_cluster_password= var.re_cluster_password
+#     re_email_from = "admin@domain.tld"
+#     re_smtp_host = "smtp.domain.tld"
 #   }
-#   #depends_on = []
 # }
 
 # # Template Write
 # resource "null_resource" "extra_vars" {
 #   provisioner "local-exec" {
-#     command = "echo \"${data.template_file.ssh_config.rendered}\" > ${path.module}/extra_vars/test-inventory.yaml"
+#     command = "echo \"${data.template_file.extra_vars.rendered}\" > ${path.module}/extra_vars/test-inventory.yaml"
 #   }
-#   depends_on = [data.template_file.ssh_config]
+#   depends_on = [data.template_file.extra_vars]
 # }
+
+
+
+######################
+# Run some ansible
+resource "null_resource" "ansible-run" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=\"False\" ansible-playbook ${path.module}/redislabs-create-cluster.yaml --private-key ${var.ssh_key_path} -i ${path.module}/inventories/test-inventory.ini -e @${path.module}/extra_vars/test-inventory.yaml -e @${path.module}/group_vars/all/main.yaml" 
+    #command = "ansible-playbook ${path.module}/redislabs-create-cluster.yaml --private-key ${var.ssh_key_path} -i ${path.module}/inventories/test-inventory.ini -e @${path.module}/extra_vars/test-inventory.yaml -e @${path.module}/group_vars/all/main.yaml" 
+    }
+    depends_on = [null_resource.dynamic_inventory_ini, 
+                  time_sleep.wait_30_seconds, 
+                  null_resource.extra_vars]
+}
