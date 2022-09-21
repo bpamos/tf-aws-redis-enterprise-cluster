@@ -7,9 +7,9 @@ terraform {
   }
 }
 
-# AWS region and AWS key pair
+#### AWS region and AWS key pair
 provider "aws" {
-  region = var.region
+  region     = var.region
   access_key = var.aws_creds[0]
   secret_key = var.aws_creds[1]
 }
