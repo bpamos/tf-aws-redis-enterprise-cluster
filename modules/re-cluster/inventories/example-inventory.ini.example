@@ -1,4 +1,0 @@
-
-var.node_1_public_dns internal_ip=${node_1_private_ip} external_ip=${node_1_external_ip}
-${var.node_2_public_dns} internal_ip=${node_2_private_ip} external_ip=${node_2_external_ip}
-${var.node_3_public_dns} internal_ip=${node_3_private_ip} external_ip=${node_3_external_ip}
