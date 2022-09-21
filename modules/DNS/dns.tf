@@ -30,6 +30,7 @@ resource "aws_route53_record" "NS_record" {
   type    = "NS"
   ttl     = "300"
   records = formatlist("node-%s.%s.${data.aws_route53_zone.selected.name}", range(1, var.data-node-count + 1), var.vpc_name)
+
 }
 #format("%s-%s-node-%s.${data.aws_route53_zone.selected.name}", var.base_name, var.region,count.index) length(["1","2","3"])
 #formatlist("%s-%s-node-%s.${data.aws_route53_zone.selected.name}", var.base_name, var.region, range(1, range(tostring(var.data-node-count))))

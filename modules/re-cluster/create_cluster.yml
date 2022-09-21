@@ -1,0 +1,27 @@
+#cloud-config
+
+# Required packages
+packages:
+  - curl
+  - autoconf
+  - automake
+  - make
+  - gcc-c++
+  - pcre-devel
+  - zlib-devel
+  - libmemcached-devel
+  - libevent
+  - libevent-devel
+  - openssl-devel
+  - git
+
+# Commands to run
+runcmd:
+  - "git clone https://github.com/RedisLabs/memtier_benchmark && (cd memtier_benchmark; autoreconf -iv && ./configure && make install)"
+  - "curl -X POST -H 'Content-Type: application/json' -H 'cache-control: no-cache' -d '{\"action\":\"create_cluster\",\"cluster\":{\"name\":\"${dns_fdnq}\"},\"node\": {\"paths\": { \"persistent_path\": \"/var/opt/redislabs/persist\", \"ephemeral_path\": \"/var/opt/redislabs/tmp\" }, \"identity\":{\"addr\":\"${node_1_private_ip}\",\"external_addr\":[\"${node_1_external_ip}\"]}}, \"credentials\":{\"username\":\"${username}\",\"password\":\"${password}\"}}' -k https://${node_1_external_ip}:9443/v1/bootstrap/create_cluster"
+  - "sleep 10"
+  - "curl -X POST -H 'Content-Type: application/json' -H 'cache-control: no-cache' -d '{ \"action\": \"join_cluster\", \"cluster\": { \"nodes\": [ \"${node_1_private_ip}\" ], \"name\": \"${dns_fdnq}\"}, \"node\": { \"paths\": { \"persistent_path\": \"/var/opt/redislabs/persist\", \"ephemeral_path\": \"/var/opt/redislabs/tmp\" }, \"identity\": { \"addr\": \"${node_2_private_ip}\", \"external_addr\": [ \"${node_2_external_ip}\" ] } }, \"credentials\": { \"username\": \"${username}\", \"password\": \"${password}\"} }' -k https://${node_2_external_ip}:9443/v1/bootstrap/join_cluster"
+  - "sleep 10"
+  - "curl -X POST -H 'Content-Type: application/json' -H 'cache-control: no-cache' -d '{ \"action\": \"join_cluster\", \"cluster\": { \"nodes\": [ \"${node_1_private_ip}\" ], \"name\": \"${dns_fdnq}\"}, \"node\": { \"paths\": { \"persistent_path\": \"/var/opt/redislabs/persist\", \"ephemeral_path\": \"/var/opt/redislabs/tmp\" }, \"identity\": { \"addr\": \"${node_3_private_ip}\", \"external_addr\": [ \"${node_3_external_ip}\" ] } }, \"credentials\": { \"username\": \"${username}\", \"password\": \"${password}\"} }' -k https://${node_3_external_ip}:9443/v1/bootstrap/join_cluster"
+  - "sleep 15"
+  - "curl -X POST -H 'cache-control: no-cache' -H 'Content-type: application/json' -u ${username}:${password} -d '{ \"name\": \"${redis_db_name_1}\", \"memory_size\": ${redis_db_memory_size_1}, \"replication\": ${redis_db_replication_1}, \"eviction_policy\": \"volatile-lru\", \"sharding\": ${redis_db_sharding_1}, \"shards_count\": ${redis_db_shard_count_1}, \"rack_aware\": false, \"type\": \"redis\", \"oss_cluster\": false, \"proxy_policy\": \"${redis_db_proxy_policy_1}\", \"shards_placement\": \"${redis_db_shards_placement_1}\", \"port\": ${redis_db_port}, \"data_persistence\": \"${redis_db_data_persistence_1}\", \"aof_policy\": \"${redis_db_aof_policy_1}\" }' -k https://${dns_fdnq}:9443/v1/bdbs"

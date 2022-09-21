@@ -61,6 +61,10 @@ output "re-data-node-eips" {
   value = module.nodes.re-data-node-eips
 }
 
+output "re-data-node-internal-ips" {
+  value = module.nodes.re-data-node-internal-ips
+}
+
 # output "test-node-eips" {
 #   value = module.nodes.test-node-eips
 # }
@@ -76,6 +80,9 @@ module "dns" {
     re-data-node-eips = module.nodes.re-data-node-eips
 }
 
+output "dns-ns-record-name" {
+  value = module.dns.dns-ns-record-name
+}
 
 ############## RE Cluster
 ##Module to access VM, then run ansilbe to create the cluster
@@ -98,6 +105,28 @@ module "create-cluster" {
   vpc_name = module.vpc.vpc-name
   vpc_subnets_ids = module.vpc.subnet-ids
   vpc_id = module.vpc.vpc-id
+
+  aws_creds = var.aws_creds
+  dns_fdnq             = module.dns.dns-ns-record-name
+  node_1_private_ip    = module.nodes.re-data-node-internal-ips[0]
+  node_1_external_ip   = module.nodes.re-data-node-eips[0]
+  node_2_private_ip    = module.nodes.re-data-node-internal-ips[1]
+  node_2_external_ip   = module.nodes.re-data-node-eips[1]
+  node_3_private_ip    = module.nodes.re-data-node-internal-ips[2]
+  node_3_external_ip   = module.nodes.re-data-node-eips[2]
+  re_cluster_username             = var.re_cluster_username
+  re_cluster_password             = var.re_cluster_password
+  redis_db_name_1             = var.redis_db_name_1
+  redis_db_memory_size_1      = var.redis_db_memory_size_1
+  redis_db_replication_1      = var.redis_db_replication_1
+  redis_db_sharding_1         = var.redis_db_sharding_1
+  redis_db_shard_count_1      = var.redis_db_shard_count_1
+  redis_db_proxy_policy_1     = var.redis_db_proxy_policy_1
+  redis_db_shards_placement_1 = var.redis_db_shards_placement_1
+  redis_db_data_persistence_1 = var.redis_db_data_persistence_1
+  redis_db_aof_policy_1       = var.redis_db_aof_policy_1
+  redis_db_port               = var.redis_db_port
+
   
   depends_on = [module.vpc, module.nodes, module.dns]
 }
