@@ -1,7 +1,7 @@
-# Resource: aws_vpc (provides a VPC resource)
-# and associated resources for vpc.
+#### Resource: aws_vpc (provides a VPC resource)
+#### and associated resources for vpc.
 
-# Create a VPC
+#### Create a VPC
 resource "aws_vpc" "redis_cluster_vpc" {
   cidr_block                  = var.vpc_cidr
   enable_dns_support          = true
@@ -19,9 +19,9 @@ data "aws_vpc" "re-vpc-data" {
 }
 
 
-# Create private subnet
+#### Create private subnets
 resource "aws_subnet" "re_subnet1" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id # requires the vpc id from the vpc resource
+  vpc_id     = aws_vpc.redis_cluster_vpc.id
   cidr_block = var.subnet_cidr_blocks[0]
   availability_zone = var.subnet_azs[0]
 
@@ -33,7 +33,7 @@ resource "aws_subnet" "re_subnet1" {
 }
 
 resource "aws_subnet" "re_subnet2" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id # requires the vpc id from the vpc resource
+  vpc_id     = aws_vpc.redis_cluster_vpc.id
   cidr_block = var.subnet_cidr_blocks[1]
   availability_zone = var.subnet_azs[1]
 
@@ -45,7 +45,7 @@ resource "aws_subnet" "re_subnet2" {
 }
 
 resource "aws_subnet" "re_subnet3" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id # requires the vpc id from the vpc resource
+  vpc_id     = aws_vpc.redis_cluster_vpc.id
   cidr_block = var.subnet_cidr_blocks[2]
   availability_zone = var.subnet_azs[2]
 
@@ -56,8 +56,8 @@ resource "aws_subnet" "re_subnet3" {
   }
 }
 
-# network
-# Create Internet Gateway (enables your vpc to connect to the internet)
+#### network
+#### Create Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.redis_cluster_vpc.id
   tags = {
@@ -67,8 +67,8 @@ resource "aws_internet_gateway" "igw" {
     }
 }
 
-# Create a custom route table 
-# (custom route table for the subnet. Subnet can reach the internet using this)
+#### Create a custom route table 
+#### (custom route table for the subnet)
 resource "aws_default_route_table" "route_table" {
   default_route_table_id = aws_vpc.redis_cluster_vpc.default_route_table_id
   route {
@@ -82,7 +82,7 @@ resource "aws_default_route_table" "route_table" {
     }
 }
 
-# assocaite the route table to the subnet.
+#### associate the route table to the subnet.
 resource "aws_route_table_association" "subnet_association1" {
   subnet_id      = aws_subnet.re_subnet1.id
   route_table_id = aws_default_route_table.route_table.id
