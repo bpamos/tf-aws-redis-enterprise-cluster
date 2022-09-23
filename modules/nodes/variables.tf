@@ -1,3 +1,5 @@
+#### Required Variables
+
 variable "region" {
     description = "AWS region"
 }
@@ -37,8 +39,8 @@ variable "subnet_azs" {
     description = "subnet availability zone"
     default = ["us-east-1a","us-east-1b","us-east-1c"]
 }
-# Test Instance Variables
 
+#### Test Instance Variables
 variable "test-node-count" {
   description = "number of data nodes"
   default     = 1
@@ -49,9 +51,7 @@ variable "test_instance_type" {
     default = "t3.micro"
 }
 
-
-# Redis Enterprise Cluster Variables
-
+#### Redis Enterprise Cluster Variables
 variable "re_download_url" {
   description = "re download url"
   default     = ""
@@ -78,14 +78,12 @@ variable "node-root-size" {
 }
 
 #### EBS Volume Size
-
 variable "re-volume-size" {
   description = "The size of the ephemeral and persistent volumes to attach"
   default     = "150"
 }
 
 #### Security
-
 variable "open-nets" {
   type        = list(any)
   description = "CIDRs that will have access to everything"

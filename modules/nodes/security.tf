@@ -1,4 +1,4 @@
-# Security Group
+#### Create Security Group
 
 resource "aws_security_group" "re_sg" {
   name        = format("%s-re-sg", var.vpc_name)

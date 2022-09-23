@@ -1,8 +1,6 @@
-# Resource: aws_eip (provides an elastic IP resource)
-# EIPs will be used as the IP addresses in your DNS 
-# and attached as the public IP address to each Redis Cluster EC2.
+#### Create & associate EIP with RE and Test Nodes
 
-### RE Nodes EIP
+#### RE Nodes EIP
 resource "aws_eip" "re_cluster_instance_eip" {
   count = var.data-node-count
   network_border_group = var.region
@@ -15,7 +13,7 @@ resource "aws_eip" "re_cluster_instance_eip" {
 
 }
 
-# Elastic IP association
+#### RE Node Elastic IP association
 resource "aws_eip_association" "re-eip-assoc" {
   count = var.data-node-count
   instance_id   = element(aws_instance.re_cluster_instance.*.id, count.index)
@@ -23,8 +21,8 @@ resource "aws_eip_association" "re-eip-assoc" {
   depends_on    = [aws_instance.re_cluster_instance, aws_eip.re_cluster_instance_eip]
 }
 
-
-### Test Nodes EIP
+#####################
+#### Test Nodes EIP
 resource "aws_eip" "test_node_eip" {
   count = var.test-node-count
   network_border_group = var.region
@@ -37,7 +35,7 @@ resource "aws_eip" "test_node_eip" {
 
 }
 
-# Elastic IP association
+#### Test Node Elastic IP association
 resource "aws_eip_association" "test_eip_assoc" {
   count = var.test-node-count
   instance_id   = element(aws_instance.test_node.*.id, count.index)

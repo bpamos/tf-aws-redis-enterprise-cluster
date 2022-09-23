@@ -39,7 +39,7 @@ variable "subnet_cidr_blocks" {
 variable "subnet_azs" {
     type = list(any)
     description = "subnet availability zone"
-    default = ["us-east-1a","us-east-1b","us-east-1c"]
+    default = [""]
 }
 
 #### DNS
@@ -98,8 +98,8 @@ variable "open-nets" {
 }
 
 variable "allow-public-ssh" {
-  description = "Allow SSH to be open to the public - disabled by default"
-  default     = "0"
+  description = "Allow SSH to be open to the public - enabled by default"
+  default     = "1"
 }
 
 variable "internal-rules" {

@@ -58,6 +58,7 @@ module "nodes" {
     re-volume-size     = var.re-volume-size
     allow-public-ssh   = var.allow-public-ssh
     open-nets          = var.open-nets
+    ### vars pulled from previous modules
     ## from vpc module outputs 
     ##(these do not need to be varibles in the variables.tf outside the modules folders
     ## since they are refrenced from the other module, but they need to be variables 
@@ -91,6 +92,7 @@ module "dns" {
     source             = "./modules/dns"
     dns_hosted_zone_id = var.dns_hosted_zone_id
     data-node-count    = var.data-node-count
+    ### vars pulled from previous modules
     vpc_name           = module.vpc.vpc-name
     re-data-node-eips  = module.nodes.re-data-node-eips
 }
@@ -106,13 +108,27 @@ module "create-cluster" {
   source               = "./modules/re-cluster"
   ssh_key_path         = var.ssh_key_path
   region               = var.region
+  re_cluster_username  = var.re_cluster_username
+  re_cluster_password  = var.re_cluster_password
+  ### vars pulled from previous modules
   vpc_name             = module.vpc.vpc-name
   re-node-internal-ips = module.nodes.re-data-node-internal-ips
   re-node-eip-ips      = module.nodes.re-data-node-eips
   re-data-node-eip-public-dns   = module.nodes.re-data-node-eip-public-dns
   dns_fqdn             = module.dns.dns-ns-record-name
-  re_cluster_username  = var.re_cluster_username
-  re_cluster_password  = var.re_cluster_password
   
   depends_on           = [module.vpc, module.nodes, module.dns]
+}
+
+#### Cluster Outputs
+output "re-cluster-url" {
+  value = module.create-cluster.re-cluster-url
+}
+
+output "re-cluster-username" {
+  value = module.create-cluster.re-cluster-username
+}
+
+output "re-cluster-password" {
+  value = module.create-cluster.re-cluster-password
 }

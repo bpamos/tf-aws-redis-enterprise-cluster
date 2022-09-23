@@ -1,5 +1,5 @@
 ---
-enable_volumes: "{{ ENABLE_VOLUMES|default(true)|bool }}"
+# enable_volumes: "{{ ENABLE_VOLUMES|default(true)|bool }}"
 
 deb_packages:
   - jq

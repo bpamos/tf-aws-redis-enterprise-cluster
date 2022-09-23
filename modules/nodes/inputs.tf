@@ -1,4 +1,5 @@
-# find the lastest ami for ubuntu 18.04 x86 server
+#### AMI for Nodes
+#### find the lastest ami for ubuntu 18.04 x86 server
 
 data "aws_ami" "re-ami" {
   most_recent = true

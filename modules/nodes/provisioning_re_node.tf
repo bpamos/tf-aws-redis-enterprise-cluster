@@ -1,4 +1,6 @@
-############################
+#### Generating Ansible config, inventory, playbook 
+#### and configuring RE nodes and installing RE software
+#### (RE nodes need special configuration to work with Ubuntu 18)
 
 #### Sleeper, after instance, eip assoc, local file inventories & cfg created
 #### otherwise it can run to fast, not find the inventory file and fail or hang
@@ -31,20 +33,20 @@ resource "null_resource" "remote-config" {
                 time_sleep.wait_30_seconds_re]
 }
 
-# #### Generate Ansible Playbook
+#### Generate Ansible Playbook
 resource "local_file" "playbook_setup" {
     count    = var.data-node-count
-    content  = templatefile("${path.module}/ansible/playbook.yaml.tpl", {
+    content  = templatefile("${path.module}/ansible/playbooks/playbook_re_node.yaml.tpl", {
         re_download_url  = var.re_download_url
     })
-    filename = "${path.module}/ansible/playbook-TEST.yaml"
+    filename = "${path.module}/ansible/playbooks/playbook_re_node.yaml"
   depends_on = [aws_instance.re_cluster_instance, aws_eip_association.re-eip-assoc, aws_volume_attachment.ephemeral_re_cluster_instance]
 }
 
-# #### Generate Ansible Inventory for each node
+#### Generate Ansible Inventory for each node
 resource "local_file" "inventory-setup" {
     count    = var.data-node-count
-    content  = templatefile("${path.module}/inventory.tpl", {
+    content  = templatefile("${path.module}/ansible/inventories/inventory.tpl", {
         host_ip  = element(aws_eip.re_cluster_instance_eip.*.public_ip, count.index)
         vpc_name = var.vpc_name
     })
@@ -52,9 +54,9 @@ resource "local_file" "inventory-setup" {
   depends_on = [aws_instance.re_cluster_instance, aws_eip_association.re-eip-assoc, aws_volume_attachment.ephemeral_re_cluster_instance]
 }
 
-# #### Generate ansible.cfg file
+#### Generate ansible.cfg file
 resource "local_file" "ssh-setup" {
-    content  = templatefile("${path.module}/ssh.tpl", {
+    content  = templatefile("${path.module}/ansible/config/ssh.tpl", {
         vpc_name = var.vpc_name
     })
     filename = "/tmp/${var.vpc_name}_node.cfg"
@@ -66,7 +68,7 @@ resource "local_file" "ssh-setup" {
 resource "null_resource" "ansible-run" {
   count = var.data-node-count
   provisioner "local-exec" {
-    command = "ansible-playbook ${path.module}/ansible/playbook.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_node_${count.index}.ini"
+    command = "ansible-playbook ${path.module}/ansible/playbooks/playbook_re_node.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_node_${count.index}.ini"
     }
   depends_on = [null_resource.remote-config,time_sleep.wait_30_seconds_re]
 }

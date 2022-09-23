@@ -1,4 +1,5 @@
-############################
+#### Generating Ansible config, inventory, playbook 
+#### and configuring test nodes and installing Redis and Memtier
 
 #### Sleeper, after instance, eip assoc, local file inventories & cfg created
 #### otherwise it can run to fast, not find the inventory file and fail or hang
@@ -9,7 +10,6 @@ resource "time_sleep" "wait_30_seconds_test" {
                 local_file.inventory_setup_test, 
                 local_file.ssh-setup-test]
 }
-
 
 # remote-config waits till the node is accessible
 resource "null_resource" "remote_config_test" {
@@ -32,12 +32,10 @@ resource "null_resource" "remote_config_test" {
                 time_sleep.wait_30_seconds_test]
 }
 
-
-
-# #### Generate Ansible Inventory for each node
+#### Generate Ansible Inventory for each node
 resource "local_file" "inventory_setup_test" {
     count    = var.test-node-count
-    content  = templatefile("${path.module}/inventory.tpl", {
+    content  = templatefile("${path.module}/ansible/inventories/inventory.tpl", {
         host_ip  = element(aws_eip.test_node_eip.*.public_ip, count.index)
         vpc_name = var.vpc_name
     })
@@ -45,9 +43,9 @@ resource "local_file" "inventory_setup_test" {
   depends_on = [aws_instance.test_node, aws_eip_association.test_eip_assoc]
 }
 
-# #### Generate ansible.cfg file
+#### Generate ansible.cfg file
 resource "local_file" "ssh-setup-test" {
-    content  = templatefile("${path.module}/ssh.tpl", {
+    content  = templatefile("${path.module}/ansible/config/ssh.tpl", {
         vpc_name = var.vpc_name
     })
     filename = "/tmp/${var.vpc_name}_test_node.cfg"
@@ -59,7 +57,7 @@ resource "local_file" "ssh-setup-test" {
 resource "null_resource" "ansible_test_run" {
   count = var.test-node-count
   provisioner "local-exec" {
-    command = "ansible-playbook ${path.module}/ansible/testnode.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_test_node_${count.index}.ini"
+    command = "ansible-playbook ${path.module}/ansible/playbooks/playbook_test_node.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_test_node_${count.index}.ini"
   }
   depends_on = [null_resource.remote_config_test, time_sleep.wait_30_seconds_test]
 }
