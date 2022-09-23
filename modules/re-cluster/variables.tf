@@ -7,6 +7,10 @@ variable "ssh_key_path" {
     description = "name of ssh key to be added to instance"
 }
 
+variable "vpc_name" {
+  description = "The VPC Project Name tag"
+}
+
 ####### Create Cluster Variables
 ####### Node and DNS outputs used to Create Cluster
 variable "dns_fqdn" {
@@ -27,12 +31,6 @@ variable "re-node-eip-ips" {
 }
 
 variable "re-data-node-eip-public-dns" {
-    type = list
-    description = "."
-    default = []
-}
-
-variable "re-data-node-info" {
     type = list
     description = "."
     default = []
