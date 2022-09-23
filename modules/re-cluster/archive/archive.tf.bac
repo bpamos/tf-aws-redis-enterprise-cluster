@@ -70,3 +70,22 @@
 #   }
 #   depends_on = [data.template_file.extra_vars]
 # }
+
+
+
+#### WORKS
+
+# locals {
+#   dynamic_inventory_ini = templatefile("${path.module}/inventories/test-inventory.tpl",
+#   {
+#     re-data-node-info = var.re-data-node-info
+#   })
+# }
+
+# # Template Write
+# resource "null_resource" "dynamic_inventory_ini" {
+#   provisioner "local-exec" {
+#     command = "echo \"${local.dynamic_inventory_ini}\" > ${path.module}/inventories/test-inventory.ini"
+#   }
+#   depends_on = [local.dynamic_inventory_ini]
+# }
