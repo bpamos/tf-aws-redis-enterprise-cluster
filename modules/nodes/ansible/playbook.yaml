@@ -41,34 +41,6 @@
       file:
         state: directory
         path: "/redis"
-    # - name: create ephemeral filesystem
-    #   filesystem:
-    #     fstype: ext4
-    #     dev: "/dev/sdh"
-    #     #dev: "/dev/nvme1n1"
-    #   when: enable_volumes
-    # - name: mount ephemeral dir filesystem
-    #   mount:
-    #     name: /redis/ephemeral
-    #     #src: /dev/nvme1n1
-    #     src: /dev/sdh
-    #     fstype: ext4
-    #     state: mounted
-    #   when: enable_volumes
-    # - name: create persistant filesystem
-    #   filesystem:
-    #     fstype: ext4
-    #     #dev: "/dev/nvme2n1"
-    #     dev: "/dev/sdj"
-    #   when: enable_volumes
-    # - name: mount persistant dir filesystem
-    #   mount:
-    #     name: /redis/persistant
-    #     #src: /dev/nvme2n1
-    #     src: /dev/sdj
-    #     fstype: ext4
-    #     state: mounted
-    #   when: enable_volumes
 
   tasks:
     - name: create download directory
