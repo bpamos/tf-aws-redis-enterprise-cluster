@@ -1,8 +1,4 @@
-# Resource: aws_instance (provides aws instances)
-# Create your aws instances, 
-# 1 memtier instance with a template file of variables for commands to run after instance creation.
-# 3 Redis Enterprise marketplace instances (with re installed)
-# Redis Enterprise Cluster Instances
+###
 
 # create Redis Enterprise cluster instance (requires ami)
 resource "aws_instance" "re_cluster_instance" {
