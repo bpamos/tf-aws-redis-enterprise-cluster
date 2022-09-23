@@ -52,6 +52,7 @@ module "nodes" {
     ssh_key_path       = var.ssh_key_path
     test_instance_type = var.test_instance_type
     test-node-count    = var.test-node-count
+    re_download_url    = var.re_download_url
     data-node-count    = var.data-node-count
     re_instance_type   = var.re_instance_type
     re-volume-size     = var.re-volume-size

@@ -52,6 +52,11 @@ variable "test_instance_type" {
 
 # Redis Enterprise Cluster Variables
 
+variable "re_download_url" {
+  description = "re download url"
+  default     = ""
+}
+
 variable "data-node-count" {
   description = "number of data nodes"
   default     = 3
