@@ -46,7 +46,7 @@ resource "local_file" "playbook_setup" {
 #### Generate Ansible Inventory for each node
 resource "local_file" "inventory-setup" {
     count    = var.data-node-count
-    content  = templatefile("${path.module}/ansible/inventories/inventory.tpl", {
+    content  = templatefile("${path.module}/ansible/inventories/inventory_re.tpl", {
         host_ip  = element(aws_eip.re_cluster_instance_eip.*.public_ip, count.index)
         vpc_name = var.vpc_name
     })

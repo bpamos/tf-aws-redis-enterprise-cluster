@@ -35,7 +35,7 @@ resource "null_resource" "remote_config_test" {
 #### Generate Ansible Inventory for each node
 resource "local_file" "inventory_setup_test" {
     count    = var.test-node-count
-    content  = templatefile("${path.module}/ansible/inventories/inventory.tpl", {
+    content  = templatefile("${path.module}/ansible/inventories/inventory_test.tpl", {
         host_ip  = element(aws_eip.test_node_eip.*.public_ip, count.index)
         vpc_name = var.vpc_name
     })
