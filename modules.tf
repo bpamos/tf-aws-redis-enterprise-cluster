@@ -79,11 +79,6 @@ output "re-data-node-eip-public-dns" {
   value = module.nodes.re-data-node-eip-public-dns
 }
 
-
-output "re-data-node-info" {
-  value = module.nodes.re-data-node-info
-}
-
 # output "test-node-eips" {
 #   value = module.nodes.test-node-eips
 # }
@@ -110,7 +105,7 @@ module "create-cluster" {
   source               = "./modules/re-cluster"
   ssh_key_path         = var.ssh_key_path
   region               = var.region
-  re-data-node-info    = module.nodes.re-data-node-info
+  vpc_name             = module.vpc.vpc-name
   re-node-internal-ips = module.nodes.re-data-node-internal-ips
   re-node-eip-ips      = module.nodes.re-data-node-eips
   re-data-node-eip-public-dns   = module.nodes.re-data-node-eip-public-dns

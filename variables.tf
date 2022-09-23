@@ -325,12 +325,6 @@ variable "re-data-node-eip-public-dns" {
     default = []
 }
 
-variable "re-data-node-info" {
-    type = list
-    description = "."
-    default = []
-}
-
 ############# cluster commands
 variable "re_cluster_username" {
     description = "redis enterprise cluster username"
