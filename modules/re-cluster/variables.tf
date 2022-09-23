@@ -1,4 +1,4 @@
-#### OTHER
+#### Required Variables
 variable "region" {
     description = "AWS region"
 }
