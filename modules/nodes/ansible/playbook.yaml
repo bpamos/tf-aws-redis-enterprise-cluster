@@ -42,6 +42,7 @@
         state: directory
         path: "/redis"
 
+
   tasks:
     - name: create download directory
       file:
