@@ -1,7 +1,7 @@
 # tf-aws-redis-enterprise-cluster
-Create a Redis Enterprise Cluster on AWS using Terraform
+Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 
-## Modules to create the following:
+## Terraform Modules to provision the following:
 * New VPC 
 * Redis Enterprise nodes and install Redis Enterprise software (ubuntu 18.04)
 * Test node with Redis and Memtier installed
@@ -18,10 +18,10 @@ Create a Redis Enterprise Cluster on AWS using Terraform
 1.  Install `aws-cli` on your local machine and run `aws configure` ([link](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)) to set your access and secret key.
     - If using an aws-cli profile other than `default`, `main.tf` may need to edited under the `provider "aws"` block to reflect the correct `aws-cli` profile.
 2.  Download the `terraform` binary for your operating system ([link](https://www.terraform.io/downloads.html)), and make sure the binary is in your `PATH` environment variable.
-    - MacOSX users can also install via `homebrew`
-        - (if you see an error saying something about security settings follow these instructions), ([link] (https://github.com/hashicorp/terraform/issues/23033))
+    - MacOSX users:
+        - (if you see an error saying something about security settings follow these instructions), ([link](https://github.com/hashicorp/terraform/issues/23033))
         - Just control click the terraform unix executable and click open. 
-    - you can also follow these instructions to install terraform ([link]https://learn.hashicorp.com/tutorials/terraform/install-cli)
+    - you can also follow these instructions to install terraform ([link](https://learn.hashicorp.com/tutorials/terraform/install-cli))
  3.  Install `ansible` via `pip3 install ansible` to your local machine   
 * Terraform local-exec provisioner invokes a local executable, so ansible must be installed on your local machine and the path needs to be updated.
 * example steps:
