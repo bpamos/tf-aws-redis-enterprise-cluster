@@ -21,13 +21,14 @@ variable "owner" {
 }
 
 #### VPC
-variable "vpc_cidr" {
-    description = "vpc-cidr"
-}
-
 variable "base_name" {
     description = "base name for resources"
     default = "redisuser1-tf"
+}
+
+variable "vpc_cidr" {
+    description = "vpc-cidr"
+    default = "10.0.0.0/16"
 }
 
 variable "subnet_cidr_blocks" {
@@ -330,12 +331,16 @@ variable "re-data-node-eip-public-dns" {
     default = []
 }
 
-############# cluster commands
+############# Create RE Cluster Variables
+
+#### Cluster Inputs
+#### RE Cluster Username
 variable "re_cluster_username" {
     description = "redis enterprise cluster username"
     default     = "admin@admin.com"
 }
 
+#### RE Cluster Password
 variable "re_cluster_password" {
     description = "redis enterprise cluster password"
     default     = "admin"

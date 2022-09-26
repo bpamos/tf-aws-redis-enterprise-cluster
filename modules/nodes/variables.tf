@@ -37,10 +37,12 @@ variable "vpc_subnets_ids" {
 variable "subnet_azs" {
     type = list(any)
     description = "subnet availability zone"
-    default = ["us-east-1a","us-east-1b","us-east-1c"]
+    default = [""]
 }
 
 #### Test Instance Variables
+
+#### instance type to use for test node with redis and memtier installed on it
 variable "test-node-count" {
   description = "number of data nodes"
   default     = 1
@@ -51,12 +53,16 @@ variable "test_instance_type" {
     default = "t3.micro"
 }
 
-#### Redis Enterprise Cluster Variables
+############## Redis Enterprise Nodes Variables
+
+#### RE Software download url (MUST BE ubuntu 18.04)
+#### example: re_download_url = "https://s3.amazonaws.com/redis-enterprise-software-downloads/x.x.xx/redislabs-x.x.xx-68-bionic-amd64.tar"
 variable "re_download_url" {
   description = "re download url"
   default     = ""
 }
 
+#### how many data nodes, 3 minimum
 variable "data-node-count" {
   description = "number of data nodes"
   default     = 3
@@ -77,7 +83,7 @@ variable "node-root-size" {
   default     = "50"
 }
 
-#### EBS Volume Size
+##### EBS volume for persistent and ephemeral storage
 variable "re-volume-size" {
   description = "The size of the ephemeral and persistent volumes to attach"
   default     = "150"
@@ -91,8 +97,8 @@ variable "open-nets" {
 }
 
 variable "allow-public-ssh" {
-  description = "Allow SSH to be open to the public - disabled by default"
-  default     = "0"
+  description = "Allow SSH to be open to the public - enabled by default"
+  default     = "1"
 }
 
 variable "internal-rules" {
