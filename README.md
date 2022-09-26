@@ -21,10 +21,10 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
     - MacOSX users:
         - (if you see an error saying something about security settings follow these instructions), ([link](https://github.com/hashicorp/terraform/issues/23033))
         - Just control click the terraform unix executable and click open. 
-    - you can also follow these instructions to install terraform ([link](https://learn.hashicorp.com/tutorials/terraform/install-cli))
+    - *you can also follow these instructions to install terraform* ([link](https://learn.hashicorp.com/tutorials/terraform/install-cli))
  3.  Install `ansible` via `pip3 install ansible` to your local machine   
-* Terraform local-exec provisioner invokes a local executable, so ansible must be installed on your local machine and the path needs to be updated.
-* example steps:
+    - A terraform local-exec provisioner is used to invoke a local executable and run the ansible playbooks, so ansible must be installed on your local machine and the path needs to be updated.
+    - example steps:
     ```
     # create virtual environment
     python3 -m venv ./venv
@@ -37,14 +37,38 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
     # If it tells you the path needs to be updated, update it
     echo $PATH
     export PATH=$PATH:/path/to/directory
+    ### you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
     ```
-    * you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
+    - for more information on install ansible to your local machine: ([link]https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+
+## Getting Started:
+Now that you have terraform and ansbile installed you can get started provisioning your RE cluster on AWS using terraform modules.
+
+Since creating a Redis Enterprise cluster from scratch takes many components (VPC, DNS, Nodes, and creating the cluster via REST API) it is best to break these up into invidivual `terraform modules`. That way if a user already has a pre-existing VPC, they can utilize that VPC instead of creating a brand new VPC.
+
+There are two important files to understand. `modules.tf` and `terraform.tfvars.example`.
+* `modules.tf`: Contains a VPC module (creates new VPC), Node module (creates and provisions ubuntu 18.04 vms with RE software installed or test vms with Redis and Memtier installed), DNS module (creates R53 DNS with NS record and A records), and a `create-cluster` module (uses ansible to create and join the RE cluster via REST API)
+
+1. Open VS code and a new VS code terminal
+
+Copy the variables template. or rename it 'terraform.tfvars'
+```bash
+  cp terraform.tfvars.example terraform.tfvars
+```
+Update terraform.tfvars with your [secrets](#secrets)
+
+* Open a terminal in VS Code:
+```bash
+  terraform init
+  terraform plan
+  terraform apply
+```
 
 
-#### Next
+## Cleanup
 
+Remove the resources that were created.
 
-Run terraform init, plan, apply
-
-for more information on install ansible to your local machine:
-https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+```bash
+  terraform destroy
+```
