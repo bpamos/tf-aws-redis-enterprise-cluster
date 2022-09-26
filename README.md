@@ -25,6 +25,7 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
  3.  Install `ansible` via `pip3 install ansible` to your local machine   
     - A terraform local-exec provisioner is used to invoke a local executable and run the ansible playbooks, so ansible must be installed on your local machine and the path needs to be updated.
     - example steps:
+
     ```
     # create virtual environment
     python3 -m venv ./venv
@@ -37,9 +38,9 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
     # If it tells you the path needs to be updated, update it
     echo $PATH
     export PATH=$PATH:/path/to/directory
-    ### you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
+    # you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
     ```
-    
+
     - for more information on install ansible to your local machine: ([link]https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 
 ## Getting Started:
