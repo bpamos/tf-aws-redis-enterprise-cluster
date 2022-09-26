@@ -41,7 +41,7 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
     # you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
     ```
 
-    - for more information on install ansible to your local machine: ([link]https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
+* for more information on install ansible to your local machine: ([link]https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 
 ## Getting Started:
 Now that you have terraform and ansbile installed you can get started provisioning your RE cluster on AWS using terraform modules.
