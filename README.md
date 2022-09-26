@@ -1,9 +1,9 @@
 # tf-aws-redis-enterprise-cluster
 Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 
-Redis Enterprise Cluster 3+ nodes.
+Redis Enterprise Cluster of 3+ nodes.
 
-Optional Test node with Redis and Memtier installed. 
+Optional test node with Redis and Memtier installed. 
 
 ## Terraform Modules to provision the following:
 * New VPC 
@@ -127,3 +127,12 @@ Remove the resources that were created.
   terraform destroy
   # Enter a value: yes
 ```
+
+## Additional Helpful Repos
+Utilized a lot of information from the following repos to create this:
+
+Terraform and Ansible repo for installing RE on ubuntu 18.04 nodes:
+* https://github.com/Redislabs-Solution-Architects/tfmodule-aws-redis-enterprise
+
+Ansible Redis PS Repo:
+* https://github.com/Redislabs-Solution-Architects/ansible-redis
