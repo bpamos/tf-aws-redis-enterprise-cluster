@@ -26,7 +26,7 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
      - A terraform local-exec provisioner is used to invoke a local executable and run the ansible playbooks, so ansible must be installed on your local machine and the path needs to be updated.
      - example steps:
 
-    ```python
+    ```
     # create virtual environment
     python3 -m venv ./venv
     # Check if you have pip
@@ -55,10 +55,37 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     - `dns module` (creates R53 DNS with NS record and A records), 
     - `create-cluster module` (uses ansible to create and join the RE cluster via REST API)
     * *the individual modules can contains inputs from previously generated from run modules.*
+    - example:
+    ```
+    # either use the variables filled in from `.tfvars` as seen below
+    module "vpc" {
+    source             = "./modules/vpc"
+    aws_creds          = var.aws_creds
+    owner              = var.owner
+    region             = var.region
+    base_name          = var.base_name
+    vpc_cidr           = var.vpc_cidr
+    subnet_cidr_blocks = var.subnet_cidr_blocks
+    subnet_azs         = var.subnet_azs
+    }
+
+    # or enter in your own values:
+    module "vpc" {
+    source             = "./modules/vpc"
+    aws_creds          = ["accessxxxx","secretxxxxxx"]
+    owner              = "redisuser"
+    region             = "us-west-2"
+    base_name          = "redis-user-tf"
+    vpc_cidr           = "10.0.0.0/16"
+    subnet_cidr_blocks = ["10.0.0.0/24","10.0.16.0/24","10.0.32.0/24"]
+    subnet_azs         = ["us-west-2a","us-west-2b","us-west-2c"]
+    }
+    ```
 * `terraform.tfvars.example`:
     - An example of a terraform variable managment file. The variables in this file are utilized as inputs into the module file. You can choose to use these or hardcode your own inputs in the modules file.
     - to use this file you need to change it from `terraform.tfvars.example` to simply `terraform.tfvars` then enter in your own inputs.
 
+### Instructions for Use:
 1. Open repo in VS code
 2. Copy the variables template. or rename it `terraform.tfvars`
     ```bash
