@@ -26,7 +26,7 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
      - A terraform local-exec provisioner is used to invoke a local executable and run the ansible playbooks, so ansible must be installed on your local machine and the path needs to be updated.
      - example steps:
 
-    ```bash
+    ```python
     # create virtual environment
     python3 -m venv ./venv
     # Check if you have pip
@@ -44,7 +44,7 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 * (*for more information on how to install ansible to your local machine:*) ([link](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 
 ## Getting Started:
-Now that you have terraform and ansbile installed you can get started provisioning your RE cluster on AWS using terraform modules.
+Now that you have terraform and ansible installed you can get started provisioning your RE cluster on AWS using terraform modules.
 
 Since creating a Redis Enterprise cluster from scratch takes many components (VPC, DNS, Nodes, and creating the cluster via REST API) it is best to break these up into invidivual `terraform modules`. That way if a user already has a pre-existing VPC, they can utilize their existing VPC instead of creating a brand new one.
 
@@ -60,7 +60,7 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     - to use this file you need to change it from `terraform.tfvars.example` to simply `terraform.tfvars` then enter in your own inputs.
 
 1. Open repo in VS code
-2. Copy the variables template. or rename it 'terraform.tfvars'
+2. Copy the variables template. or rename it `terraform.tfvars`
     ```bash
     cp terraform.tfvars.example terraform.tfvars
     ```
