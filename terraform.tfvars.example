@@ -1,0 +1,91 @@
+#### User Input Required
+#### Enter your user variables here
+#### Some variables have default values and if you do not specify 
+
+#### User Input Required
+#### Access key and Secret key for aws account [AWS_ACCESS_KEY, AWS_SECRET_KEY] 
+aws_creds = ["myAccesssKeyxjdklfdakf","MySecretKeyxkldkfhadjkfh"]
+
+#### User Input Required
+#### name of ssh key to be added to instance (AWS key pair name)
+ssh_key_name = "my-ssh-key"
+
+#### path to your SSH key
+ssh_key_path = "~/keys/my-ssh-key.pem"
+
+#### User Input Required
+#### DNS hosted zone id (find value in R53 hosted zones)
+dns_hosted_zone_id = "ZZIDFKDZ"
+
+#### Owner tag name of resources
+owner = "redisuser"
+
+# AWS Region
+region = "us-west-2"
+
+# Base Name of Resources 
+# (Resource prefix for all generated resources)
+# default = "redisuser1-tf"
+base_name = "redis-tf"
+
+################### VPC Variables
+
+#### example: vpc_cidr = ""10.0.0.0/16""
+vpc_cidr = "10.0.0.0/16"
+
+#### Subnet CIDR Block 
+#### example: subnet_cidr_blocks = ["10.0.0.0/24","10.0.16.0/24","10.0.32.0/24"]
+subnet_cidr_blocks = ["10.0.0.0/24","10.0.16.0/24","10.0.32.0/24"]
+
+#### Subnet AZ 
+#### example: subnet_azs = ["us-west-2a","us-west-2b","us-west-2c"]
+subnet_azs = ["us-west-2a","us-west-2b","us-west-2c"]
+
+############### Test Instance Variables
+
+#### instance type to use for test node with redis and memtier installed on it
+#### example: test_instance_type = "t3.micro"
+test_instance_type = "t3.micro"
+
+#### how many test nodes
+#### example: test-node-count = 1
+test-node-count = 1
+
+############## Redis Enterprise Nodes Variables
+
+#### RE Software download url (MUST BE ubuntu 18.04)
+#### example: re_download_url = "https://s3.amazonaws.com/redis-enterprise-software-downloads/x.x.xx/redislabs-x.x.xx-68-bionic-amd64.tar"
+re_download_url = "https://s3.amazonaws.com/redis-enterprise-software-downloads/x.x.xx/redislabs-x.x.xx-68-bionic-amd64.tar"
+
+#### how many data nodes, 3 minimum, (odd numbers required)
+#### example: data-node-count = 3
+data-node-count = 3
+
+##### redis enterprise software instance type
+##### example: re_instance_type = "t2.xlarge"
+re_instance_type = "t2.xlarge"
+
+##### EBS volume for persistent and ephemeral storage
+#### example: re-volume-size = 150
+re-volume-size = "50"
+
+##### SECURITY
+##### example: allow-public-ssh = 1
+allow-public-ssh = 1
+
+##### explanation...
+##### example: open-nets = ["10.0.0.0/16"]
+open-nets = ["10.0.0.0/16"]
+
+
+############# Create RE Cluster Variables
+
+#### Cluster Inputs
+#### RE Cluster Username
+#### example: re_cluster_username = "admin@admin.com"
+re_cluster_username = "admin@admin.com"
+
+#### RE Cluster Password
+#### example: re_cluster_password = "admin"
+re_cluster_password = "admin"
+
