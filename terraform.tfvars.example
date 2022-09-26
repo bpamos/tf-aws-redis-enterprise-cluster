@@ -20,12 +20,12 @@ dns_hosted_zone_id = "ZZIDFKDZ"
 #### Owner tag name of resources
 owner = "redisuser"
 
-# AWS Region
+#### AWS Region
 region = "us-west-2"
 
-# Base Name of Resources 
-# (Resource prefix for all generated resources)
-# default = "redisuser1-tf"
+#### Base Name of Resources 
+#### (Resource prefix for all generated resources)
+#### default = "redisuser1-tf"
 base_name = "redis-tf"
 
 ################### VPC Variables
