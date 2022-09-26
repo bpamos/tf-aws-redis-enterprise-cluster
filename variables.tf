@@ -21,13 +21,14 @@ variable "owner" {
 }
 
 #### VPC
-variable "vpc_cidr" {
-    description = "vpc-cidr"
-}
-
 variable "base_name" {
     description = "base name for resources"
     default = "redisuser1-tf"
+}
+
+variable "vpc_cidr" {
+    description = "vpc-cidr"
+    default = "10.0.0.0/16"
 }
 
 variable "subnet_cidr_blocks" {
@@ -39,7 +40,7 @@ variable "subnet_cidr_blocks" {
 variable "subnet_azs" {
     type = list(any)
     description = "subnet availability zone"
-    default = ["us-east-1a","us-east-1b","us-east-1c"]
+    default = [""]
 }
 
 #### DNS
@@ -59,6 +60,11 @@ variable "test_instance_type" {
 }
 
 #### Redis Enterprise Cluster Variables
+variable "re_download_url" {
+  description = "re download url"
+  default     = ""
+}
+
 variable "data-node-count" {
   description = "number of data nodes"
   default     = 3
@@ -93,8 +99,8 @@ variable "open-nets" {
 }
 
 variable "allow-public-ssh" {
-  description = "Allow SSH to be open to the public - disabled by default"
-  default     = "0"
+  description = "Allow SSH to be open to the public - enabled by default"
+  default     = "1"
 }
 
 variable "internal-rules" {
@@ -325,12 +331,16 @@ variable "re-data-node-eip-public-dns" {
     default = []
 }
 
-############# cluster commands
+############# Create RE Cluster Variables
+
+#### Cluster Inputs
+#### RE Cluster Username
 variable "re_cluster_username" {
     description = "redis enterprise cluster username"
     default     = "admin@admin.com"
 }
 
+#### RE Cluster Password
 variable "re_cluster_password" {
     description = "redis enterprise cluster password"
     default     = "admin"

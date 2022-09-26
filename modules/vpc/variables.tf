@@ -1,6 +1,5 @@
 variable "region" {
     description = "AWS region"
-    default = "us-east-1"
 }
 
 variable "aws_creds" {
@@ -14,6 +13,7 @@ variable "owner" {
 #### VPC
 variable "vpc_cidr" {
     description = "vpc-cidr"
+    default = "10.0.0.0/16"
 }
 
 variable "base_name" {
@@ -29,8 +29,8 @@ variable "subnet_cidr_blocks" {
 
 variable "subnet_azs" {
     type = list(any)
-    description = "subnet availability zone"
-    default = ["us-east-1a","us-east-1b","us-east-1c"]
+    description = "subnet availability zone (3 required)"
+    default = [""]
 }
 
 

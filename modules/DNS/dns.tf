@@ -1,7 +1,7 @@
 # DNS Record for Redis Cluster
 
 # DNS record set from existing hosted zone
-# uses aws_eip (elastic ips assocated with each re instance)
+# A records are aws_eip (elastic ips assocated with each re instance)
 
 # Get a Hosted Zone from zone id
 data "aws_route53_zone" "selected" {
@@ -20,7 +20,6 @@ resource "aws_route53_record" "A_record" {
             element(var.re-data-node-eips, count.index)
             ]
 }
-
 
 # create NS record. Requires an existing R53 zone.
 resource "aws_route53_record" "NS_record" {

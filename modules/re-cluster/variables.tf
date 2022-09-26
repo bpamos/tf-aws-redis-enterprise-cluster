@@ -1,4 +1,4 @@
-#### OTHER
+#### Required Variables
 variable "region" {
     description = "AWS region"
 }
@@ -13,6 +13,7 @@ variable "vpc_name" {
 
 ####### Create Cluster Variables
 ####### Node and DNS outputs used to Create Cluster
+#### created during node module and used as outputs (no input required)
 variable "dns_fqdn" {
     description = "."
     default = ""
@@ -36,12 +37,16 @@ variable "re-data-node-eip-public-dns" {
     default = []
 }
 
-############# cluster commands
+############# Create RE Cluster Variables
+
+#### Cluster Inputs
+#### RE Cluster Username
 variable "re_cluster_username" {
     description = "redis enterprise cluster username"
     default     = "admin@admin.com"
 }
 
+#### RE Cluster Password
 variable "re_cluster_password" {
     description = "redis enterprise cluster password"
     default     = "admin"

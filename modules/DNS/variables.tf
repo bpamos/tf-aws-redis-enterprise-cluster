@@ -1,6 +1,5 @@
+#### DNS variables
 
-
-# DNS
 variable "dns_hosted_zone_id" {
     description = "DNS hosted zone Id"
 }

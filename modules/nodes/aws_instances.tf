@@ -1,6 +1,6 @@
-###
+#### Create EC2 Nodes for RE and Test
 
-# create Redis Enterprise cluster instance (requires ami)
+# create nodes for your Redis Enterprise cluster
 resource "aws_instance" "re_cluster_instance" {
   count                       = var.data-node-count
   ami                         = data.aws_ami.re-ami.id
@@ -19,7 +19,7 @@ resource "aws_instance" "re_cluster_instance" {
 
 }
 
-# create test node to run memtier benchmarks against cluster and create cluster via REST API.
+# create test node for any potential testing
 resource "aws_instance" "test_node" {
   count                       = var.test-node-count
   ami                         = data.aws_ami.re-ami.id
