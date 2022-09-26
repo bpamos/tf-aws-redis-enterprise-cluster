@@ -1,9 +1,13 @@
 # tf-aws-redis-enterprise-cluster
 Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 
+Redis Enterprise Cluster 3+ nodes.
+
+Optional Test node with Redis and Memtier installed. 
+
 ## Terraform Modules to provision the following:
 * New VPC 
-* Redis Enterprise nodes and install Redis Enterprise software (ubuntu 18.04)
+* Any number of Redis Enterprise nodes and install Redis Enterprise software (ubuntu 18.04)
 * Test node with Redis and Memtier installed
 * DNS (NS and A records for Redis Enterprise nodes)
 * Create and Join Redis Enterprise cluster 
@@ -91,21 +95,28 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     ```bash
     cp terraform.tfvars.example terraform.tfvars
     ```
-3. Update terraform.tfvars variable inputs with your own inputs
+3. Update `terraform.tfvars` variable inputs with your own inputs
     - Some require user input, some will will use a default value if none is given
 4. Now you are ready to go!
     * Open a terminal in VS Code:
     ```bash
+    # ensure ansible is in path
+    ansible --version
+    # run terraform commands
     terraform init
     terraform plan
     terraform apply
-    # yes
-    # can take around 6 or so minutes
+    # Enter a value: yes
+    # can take around 10 minutes to provision cluster
     ```
-5. After a successful run there should be outputs showing the FQDN of your RE cluster and the username and password.
+5. After a successful run there should be outputs showing the FQDN of your RE cluster and the username and password. (*you may need to scroll up a little*)
  - example output:
  ```
- example
+ Outputs:
+
+re-cluster-url = "https://redis-tf-us-west-2-cluster.mydomain.com:8443"
+re-cluster-username = "admin@admin.com"
+re-cluster-password = "admin"
  ```
 
 ## Cleanup
@@ -114,4 +125,5 @@ Remove the resources that were created.
 
 ```bash
   terraform destroy
+  # Enter a value: yes
 ```
