@@ -1,7 +1,7 @@
 # tf-aws-redis-enterprise-cluster
 Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 
-Redis Enterprise Cluster of 3+ nodes.
+Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password.
 
 Optional test node with Redis and Memtier installed. 
 
@@ -11,6 +11,13 @@ Optional test node with Redis and Memtier installed.
 * Test node with Redis and Memtier installed
 * DNS (NS and A records for Redis Enterprise nodes)
 * Create and Join Redis Enterprise cluster 
+
+### !!!! Requirements !!!
+* Redis Enterprise Software (**Ubuntu 18.04**)
+* R53 DNS_hosted_zone_id
+* aws access key and secret key
+* an **AWS generated** SSH key for the region you are creating the cluster
+    - *you must chmod 400 the key before use*
 
 ### Prerequisites
 * aws-cli (aws access key and secret key)
@@ -42,6 +49,8 @@ Optional test node with Redis and Memtier installed.
     # If it tells you the path needs to be updated, update it
     echo $PATH
     export PATH=$PATH:/path/to/directory
+    # example: export PATH=$PATH:/Users/username/Library/Python/3.8/bin
+    # (*make sure you choose the correct python version you are using*)
     # you can check if its in the path of your directory by typing "ansible-playbook" and seeing if the command exists
     ```
 
