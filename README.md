@@ -5,6 +5,8 @@ Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password
 
 Optional test node with Redis and Memtier installed. 
 
+![Alt text](image/RE-TF-Deploy.png?raw=true "Title")
+
 ## Terraform Modules to provision the following:
 * New VPC 
 * Any number of Redis Enterprise nodes and install Redis Enterprise software (ubuntu 18.04)
