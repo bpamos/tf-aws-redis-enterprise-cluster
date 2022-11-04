@@ -5,7 +5,8 @@ Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password
 
 Optional test node with Redis and Memtier installed. 
 
-![Alt text](image/RE-TF-Deploy1.png?raw=true "Title")
+* Example of deployment: (user can choose any number of RE nodes and any number of tester nodes to deploy)
+![Alt text](image/RE-TF-Deploy.jpeg?raw=true "Title")
 
 ## Terraform Modules to provision the following:
 * New VPC 
