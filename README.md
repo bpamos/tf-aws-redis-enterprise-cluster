@@ -137,7 +137,7 @@ re-cluster-password = "admin"
  ```
 
 You will also find a `grafana_url` if you provisioned the prometheus node.
-The `username`= admin and `password` = secret 
+The `username = admin` and `password = secret` 
 
 ## Cleanup
 
