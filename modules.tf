@@ -50,8 +50,6 @@ module "nodes" {
     subnet_azs         = var.subnet_azs
     ssh_key_name       = var.ssh_key_name
     ssh_key_path       = var.ssh_key_path
-    test_instance_type = var.test_instance_type
-    test-node-count    = var.test-node-count
     re_download_url    = var.re_download_url
     data-node-count    = var.data-node-count
     re_instance_type   = var.re_instance_type
@@ -81,9 +79,41 @@ output "re-data-node-eip-public-dns" {
   value = module.nodes.re-data-node-eip-public-dns
 }
 
-# output "test-node-eips" {
-#   value = module.nodes.test-node-eips
-# }
+output "vpc_security_group_ids" {
+  value = module.nodes.vpc_security_group_ids
+}
+
+output "re_ami" {
+  value = module.nodes.re_ami
+}
+
+
+########### Test Node Module
+#### Create Test nodes
+#### Ansible playbooks configure Test node with Redis and Memtier
+module "tester-nodes" {
+    source             = "./modules/tester-nodes"
+    owner              = var.owner
+    region             = var.region
+    vpc_cidr           = var.vpc_cidr
+    subnet_azs         = var.subnet_azs
+    ssh_key_name       = var.ssh_key_name
+    ssh_key_path       = var.ssh_key_path
+    test_instance_type = var.test_instance_type
+    test-node-count    = var.test-node-count
+    ### vars pulled from previous modules
+    vpc_name           = module.vpc.vpc-name
+    vpc_subnets_ids    = module.vpc.subnet-ids
+    vpc_id             = module.vpc.vpc-id
+    vpc_security_group_ids = module.nodes.vpc_security_group_ids
+    re_ami             = module.nodes.re_ami
+
+    depends_on = [module.vpc, module.nodes]
+}
+
+output "test-node-eips" {
+  value = module.tester-nodes.test-node-eips
+}
 
 ########### DNS Module
 #### Create DNS (NS record, A records for each RE node and its eip)
@@ -131,4 +161,32 @@ output "re-cluster-username" {
 
 output "re-cluster-password" {
   value = module.create-cluster.re-cluster-password
+}
+
+########## Prometheus and Grafana Module
+##### install prometheus on new node
+module "prometheus-node" {
+    source             = "./modules/prometheus-node"
+    owner              = var.owner
+    region             = var.region
+    vpc_cidr           = var.vpc_cidr
+    subnet_azs         = var.subnet_azs
+    ssh_key_name       = var.ssh_key_name
+    ssh_key_path       = var.ssh_key_path
+    prometheus_instance_type = var.prometheus_instance_type
+    ### vars pulled from previous modules
+    vpc_name           = module.vpc.vpc-name
+    vpc_subnets_ids    = module.vpc.subnet-ids
+    vpc_id             = module.vpc.vpc-id
+    vpc_security_group_ids = module.nodes.vpc_security_group_ids
+    re_ami             = module.nodes.re_ami
+    dns_fqdn           = module.dns.dns-ns-record-name
+
+
+    depends_on = [module.vpc, module.nodes, module.dns, module.create-cluster]
+}
+
+#### dns FQDN output used in future modules
+output "grafana_url" {
+  value = module.prometheus-node.grafana_url
 }
