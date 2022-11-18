@@ -40,19 +40,6 @@ variable "subnet_azs" {
     default = [""]
 }
 
-#### Test Instance Variables
-
-#### instance type to use for test node with redis and memtier installed on it
-variable "test-node-count" {
-  description = "number of data nodes"
-  default     = 1
-}
-
-variable "test_instance_type" {
-    description = "instance type to use. Default: t3.micro"
-    default = "t3.micro"
-}
-
 ############## Redis Enterprise Nodes Variables
 
 #### RE Software download url (MUST BE ubuntu 18.04)
