@@ -3,7 +3,9 @@ Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 
 Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password.
 
-Optional test node with Redis and Memtier installed. 
+Optional test node with Redis and Memtier installed.
+
+Optional Prometheus and Grafana node with advanced monitoring.
 
 * Example of deployment: (user can choose any number of RE nodes and any number of tester nodes to deploy)
 ![Alt text](image/RE-TF-Deploy.jpg?raw=true "Title")
@@ -12,6 +14,7 @@ Optional test node with Redis and Memtier installed.
 * New VPC 
 * Any number of Redis Enterprise nodes and install Redis Enterprise software (ubuntu 18.04)
 * Test node with Redis and Memtier installed
+* Prometheus and Grafana node configured for advanced monitoring
 * DNS (NS and A records for Redis Enterprise nodes)
 * Create and Join Redis Enterprise cluster 
 
@@ -67,7 +70,9 @@ Since creating a Redis Enterprise cluster from scratch takes many components (VP
 There are two important files to understand. `modules.tf` and `terraform.tfvars.example`.
 * `modules.tf` contains the following: 
     - `vpc module` (creates new VPC)
-    - `node module` (creates and provisions ubuntu 18.04 vms with RE software installed or test vms with Redis and Memtier installed)
+    - `node module` (creates and provisions ubuntu 18.04 vms with RE software installed)
+    - `tester-nodes` (creates test nodes with Redis and Memtier installed)
+    - `prometheus-node` (creates prometheus node with prometheus and grafana configured for advanced monitoring on the Redis Enterprise Cluster)
     - `dns module` (creates R53 DNS with NS record and A records), 
     - `create-cluster module` (uses ansible to create and join the RE cluster via REST API)
     * *the individual modules can contains inputs from previously generated from run modules.*
@@ -130,6 +135,9 @@ re-cluster-url = "https://redis-tf-us-west-2-cluster.mydomain.com:8443"
 re-cluster-username = "admin@admin.com"
 re-cluster-password = "admin"
  ```
+
+You will also find a `grafana_url` if you provisioned the prometheus node.
+The `username`= admin and `password` = secret 
 
 ## Cleanup
 
