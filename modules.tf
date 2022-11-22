@@ -40,7 +40,7 @@ output "vpc_name" {
 }
 
 ########### Node Module
-#### Create RE and Test nodes
+#### Create RE nodes
 #### Ansible playbooks configure and install RE software on nodes
 module "nodes" {
     source             = "./modules/nodes"
