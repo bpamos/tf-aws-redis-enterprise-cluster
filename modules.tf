@@ -3,6 +3,7 @@
 #### Brand new VPC 
 #### RE nodes and install RE software (ubuntu)
 #### Test node with Redis and Memtier
+#### Prometheus Node for advanced monitoring of Redis Enterprise Cluster
 #### DNS (NS and A records for RE nodes)
 #### Create and Join RE cluster 
 
@@ -41,7 +42,6 @@ output "vpc_name" {
 ########### Node Module
 #### Create RE and Test nodes
 #### Ansible playbooks configure and install RE software on nodes
-#### Ansible playbooks configure Test node with Redis and Memtier
 module "nodes" {
     source             = "./modules/nodes"
     owner              = var.owner
@@ -164,7 +164,7 @@ output "re-cluster-password" {
 }
 
 ########## Prometheus and Grafana Module
-##### install prometheus on new node
+##### configure prometheus and grafana on new node
 module "prometheus-node" {
     source             = "./modules/prometheus-node"
     owner              = var.owner
@@ -189,4 +189,12 @@ module "prometheus-node" {
 #### dns FQDN output used in future modules
 output "grafana_url" {
   value = module.prometheus-node.grafana_url
+}
+
+output "grafana_username" {
+  value = "admin"
+}
+
+output "grafana_password" {
+  value = "secret"
 }

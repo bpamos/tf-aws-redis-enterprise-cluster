@@ -26,9 +26,11 @@ ssh_key_path =
 dns_hosted_zone_id =
 
 #### Owner tag name of resources
+#### example: owner = "redisuser"
 owner = "redisuser"
 
 #### AWS Region
+#### example: region = "us-west-2"
 region = "us-west-2"
 
 #### Base Name of Resources 

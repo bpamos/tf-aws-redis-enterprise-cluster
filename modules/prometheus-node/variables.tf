@@ -42,12 +42,6 @@ variable "subnet_azs" {
 
 #### prometheus Instance Variables
 
-#### instance type to use for test node with redis and memtier installed on it
-# variable "prometheus-node-count" {
-#   description = "number of prometheus nodes"
-#   default     = 1
-# }
-
 variable "prometheus_instance_type" {
     description = "instance type to use. Default: t3.micro"
     default = "t3.micro"
@@ -72,10 +66,3 @@ variable "dns_fqdn" {
   description = "dns_fqdn"
   default     = ""
 }
-
-
-# variable "prometheus-node-eips" {
-#     type = list
-#     description = "."
-#     default = []
-# }

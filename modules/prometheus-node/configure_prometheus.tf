@@ -1,5 +1,5 @@
 #### Generating Ansible config, inventory, playbook 
-#### and configuring test nodes and installing Redis and Memtier
+#### and configuring Prometheus node with Prometheus and Grafana
 
 #### Sleeper, after instance, eip assoc, local file inventories & cfg created
 #### otherwise it can run to fast, not find the inventory file and fail or hang
@@ -61,7 +61,6 @@ resource "local_file" "prometheus" {
         cluster_fqdn = var.dns_fqdn
     })
     filename = "/tmp/prometheus.yml"
-  #depends_on = [time_sleep.wait_30_seconds_prometheus]
 }
 
 
@@ -70,7 +69,6 @@ resource "local_file" "docker_compose" {
     content  = templatefile("${path.module}/ansible/prometheus/docker-compose.yml.tpl", {
     })
     filename = "/tmp/docker-compose.yml"
-  #depends_on = [time_sleep.wait_30_seconds_prometheus]
 }
 
 ######################
@@ -95,7 +93,6 @@ resource "local_file" "prometheus_datasource" {
         prometheus_url = format("http://%s:9090", aws_eip.prometheus_node_eip[0].public_ip)
     })
     filename = "${path.module}/ansible/roles/grafana-datasource/defaults/main.yml"
-  #depends_on = [time_sleep.wait_30_seconds_prometheus]
 }
 
 
@@ -128,21 +125,18 @@ resource "null_resource" "ansible_run_grafana_datasource" {
 #### save json files to tmp folder so I can access them
 resource "local_file" "save_grafana_cluster_to_tmp" {
     content  = templatefile("${path.module}/ansible/grafana/cluster.json", {
-        #vpc_name = var.vpc_name
     })
     filename = "/tmp/cluster.json"
 }
 
 resource "local_file" "save_grafana_database_to_tmp" {
     content  = templatefile("${path.module}/ansible/grafana/database.json", {
-        #vpc_name = var.vpc_name
     })
     filename = "/tmp/database.json"
 }
 
 resource "local_file" "save_grafana_node_to_tmp" {
     content  = templatefile("${path.module}/ansible/grafana/node.json", {
-        #vpc_name = var.vpc_name
     })
     filename = "/tmp/node.json"
 }

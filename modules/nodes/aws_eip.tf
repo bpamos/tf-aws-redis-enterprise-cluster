@@ -1,4 +1,4 @@
-#### Create & associate EIP with RE and Test Nodes
+#### Create & associate EIP with RE
 
 #### RE Nodes EIP
 resource "aws_eip" "re_cluster_instance_eip" {

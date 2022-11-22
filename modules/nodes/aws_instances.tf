@@ -1,4 +1,4 @@
-#### Create EC2 Nodes for RE and Test
+#### Create EC2 Nodes for RE
 
 # create nodes for your Redis Enterprise cluster
 resource "aws_instance" "re_cluster_instance" {

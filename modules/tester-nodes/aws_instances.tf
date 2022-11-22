@@ -1,4 +1,4 @@
-#### Create EC2 Nodes for RE and Test
+#### Create EC2 Nodes for Test Node
 
 # create test node for any potential testing
 resource "aws_instance" "test_node" {

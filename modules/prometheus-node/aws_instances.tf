@@ -1,6 +1,6 @@
-#### Create EC2 Nodes for RE and Test
+#### Create EC2 Nodes for Prometheus Node
 
-# create test node for any potential testing
+# create Prometheus node
 resource "aws_instance" "prometheus_node" {
   count                       = 1
   ami                         = var.re_ami

@@ -1,4 +1,4 @@
-#### Create & associate EIP with RE and Test Nodes
+#### Create & associate EIP with Test Nodes
 
 #####################
 #### Test Nodes EIP

@@ -1,7 +1,7 @@
-#### Create & associate EIP with RE and Test Nodes
+#### Create & associate EIP with Prometheus Node
 
 #####################
-#### Test Nodes EIP
+#### Prometheus Nodes EIP
 resource "aws_eip" "prometheus_node_eip" {
   count = 1
   network_border_group = var.region
@@ -14,7 +14,7 @@ resource "aws_eip" "prometheus_node_eip" {
 
 }
 
-#### Test Node Elastic IP association
+#### Prometheus Node Elastic IP association
 resource "aws_eip_association" "prometheus_eip_assoc" {
   count = 1
   instance_id   = element(aws_instance.prometheus_node.*.id, count.index)
