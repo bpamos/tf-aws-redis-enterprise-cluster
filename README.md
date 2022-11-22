@@ -130,10 +130,14 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
  - example output:
  ```
  Outputs:
-
+dns-ns-record-name = "https://redis-tf-us-west-2-cluster.mydomain.com"
+grafana_password = "secret"
+grafana_url = "http://100.20.72.136:3000"
+grafana_username = "admin"
+re-cluster-password = "admin"
 re-cluster-url = "https://redis-tf-us-west-2-cluster.mydomain.com:8443"
 re-cluster-username = "admin@admin.com"
-re-cluster-password = "admin"
+
  ```
 
 You will also find a `grafana_url` if you provisioned the prometheus node.
