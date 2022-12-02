@@ -143,9 +143,6 @@ re-cluster-username = "admin@admin.com"
 
  ```
 
-You will also find a `grafana_url` if you provisioned the prometheus node.
-The `username = admin` and `password = secret` 
-
 ## Cleanup
 
 Remove the resources that were created.
