@@ -58,6 +58,7 @@ subnet_azs = ["us-west-2a","us-west-2b","us-west-2c"]
 test_instance_type = "t3.micro"
 
 #### how many test nodes
+#### If you want a Tester node configured with redis and memtier, say 1 or greater, else say 0
 #### example: test-node-count = 1
 test-node-count = 1
 

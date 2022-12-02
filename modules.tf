@@ -100,7 +100,7 @@ module "tester-nodes" {
     ssh_key_name       = var.ssh_key_name
     ssh_key_path       = var.ssh_key_path
     test_instance_type = var.test_instance_type
-    test-node-count    = var.test-node-count
+    test-node-count    = var.test-node-count #if you want a tester node, enter 1 or greater, else 0
     ### vars pulled from previous modules
     vpc_name           = module.vpc.vpc-name
     vpc_subnets_ids    = module.vpc.subnet-ids
@@ -165,6 +165,7 @@ output "re-cluster-password" {
 
 ########## Prometheus and Grafana Module
 ##### configure prometheus and grafana on new node
+######## IF YOU DONT WANT A GRAFANA NODE, Comment out this module and its outputs
 module "prometheus-node" {
     source             = "./modules/prometheus-node"
     owner              = var.owner
