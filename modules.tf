@@ -91,6 +91,7 @@ output "re_ami" {
 ########### Test Node Module
 #### Create Test nodes
 #### Ansible playbooks configure Test node with Redis and Memtier
+######## IF YOU DONT WANT A TESTER NODE, Comment out this module and its outputs
 module "tester-nodes" {
     source             = "./modules/tester-nodes"
     owner              = var.owner
@@ -163,8 +164,8 @@ output "re-cluster-password" {
   value = module.create-cluster.re-cluster-password
 }
 
-########## Prometheus and Grafana Module
-##### configure prometheus and grafana on new node
+######### Prometheus and Grafana Module
+#### configure prometheus and grafana on new node
 ######## IF YOU DONT WANT A GRAFANA NODE, Comment out this module and its outputs
 module "prometheus-node" {
     source             = "./modules/prometheus-node"

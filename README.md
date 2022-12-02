@@ -1,11 +1,10 @@
 # tf-aws-redis-enterprise-cluster
 Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
-
 Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password.
 
-Optional test node with Redis and Memtier installed.
+Create an optional test node or nodes with Redis and Memtier installed.
 
-Optional Prometheus and Grafana node with advanced monitoring.
+Create an optional Prometheus and Grafana node configured to the Redis Enterprie cluster for advanced monitoring at the cluster, node, and database levels.
 
 * Example of deployment: (user can choose any number of RE nodes and any number of tester nodes to deploy)
 ![Alt text](image/RE-TF-Deploy.jpg?raw=true "Title")
@@ -72,7 +71,9 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     - `vpc module` (creates new VPC)
     - `node module` (creates and provisions ubuntu 18.04 vms with RE software installed)
     - `tester-nodes` (creates test nodes with Redis and Memtier installed)
+        - *If you do not want to provision tester nodes, comment this module out*
     - `prometheus-node` (creates prometheus node with prometheus and grafana configured for advanced monitoring on the Redis Enterprise Cluster)
+        - *If you do not want to provision the prometheus and grafana node, comment this module out*
     - `dns module` (creates R53 DNS with NS record and A records), 
     - `create-cluster module` (uses ansible to create and join the RE cluster via REST API)
     * *the individual modules can contains inputs from previously generated from run modules.*
