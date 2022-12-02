@@ -268,13 +268,28 @@ variable "internal-rules" {
       protocol  = "udp"
       comment   = "Let UDP out to the VPC"
     },
-    #    {
-    #      type      = "ingress"
-    #      from_port = "8080"
-    #      to_port   = "8080"
-    #      protocol  = "tcp"
-    #      comment   = "Allow for host check between nodes"
-    #    },
+    {
+      type      = "ingress"
+      from_port = "8080"
+      to_port   = "8080"
+      protocol  = "tcp"
+      comment   = "Allow for host check between nodes (also for grafana access)"
+    },
+    {
+      type      = "ingress"
+      from_port = "9090"
+      to_port   = "9090"
+      protocol  = "tcp"
+      comment   = "For Grafana Access"
+    },
+    {
+      type      = "ingress"
+      from_port = "3000"
+      to_port   = "3000"
+      protocol  = "tcp"
+      comment   = "For Grafana Access"
+    }
+    
   ]
 }
 
@@ -303,8 +318,38 @@ variable "external-rules" {
       protocol  = "udp"
       cidr      = ["0.0.0.0/0"]
     }
+    
   ]
 }
+
+####### Prometheus Node Variables
+
+variable "prometheus_instance_type" {
+    description = "instance type to use. Default: t3.micro"
+    default = "t3.micro"
+}
+
+
+####### Node Output Variables
+#### used in additional modules
+
+variable "vpc_security_group_ids" {
+    type = list
+    description = "."
+    default = []
+}
+
+variable "re_ami" {
+    description = "."
+    default = ""
+}
+
+variable "test-node-eips" {
+    type = list
+    description = "."
+    default = []
+}
+
 
 ####### Create Cluster Variables
 ####### Node and DNS outputs used to Create Cluster
