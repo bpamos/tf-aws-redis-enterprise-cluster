@@ -1,9 +1,7 @@
-#### Resource: aws_vpc (provides a VPC resource)
-#### and associated resources for vpc.
 
-#### Create a VPC
-resource "aws_vpc" "redis_cluster_vpc" {
-  cidr_block                  = var.vpc_cidr
+#### Create the VPC
+resource "aws_vpc" "vpc" {
+  cidr_block = var.vpc_cidr
   enable_dns_support          = true
   enable_dns_hostnames        = true
 
@@ -14,84 +12,50 @@ resource "aws_vpc" "redis_cluster_vpc" {
   }
 }
 
-data "aws_vpc" "re-vpc-data" {
-  id = aws_vpc.redis_cluster_vpc.id
-}
 
-
-#### Create private subnets
-resource "aws_subnet" "re_subnet1" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id
-  cidr_block = var.subnet_cidr_blocks[0]
-  availability_zone = var.subnet_azs[0]
-
+#### Create the subnets
+resource "aws_subnet" "subnets" {
+  for_each = zipmap(var.subnet_cidr_blocks, var.subnet_azs)
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = each.key
+  availability_zone = each.value
   tags = {
-    Name = format("%s-subnet1", var.base_name),
+    Name = format("%s-subnet-%s", var.base_name, each.key)
     Project = format("%s-%s-cluster", var.base_name, var.region),
     Owner = var.owner
   }
 }
 
-resource "aws_subnet" "re_subnet2" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id
-  cidr_block = var.subnet_cidr_blocks[1]
-  availability_zone = var.subnet_azs[1]
-
-  tags = {
-    Name = format("%s-subnet2", var.base_name),
-    Project = format("%s-%s-cluster", var.base_name, var.region),
-    Owner = var.owner
-  }
-}
-
-resource "aws_subnet" "re_subnet3" {
-  vpc_id     = aws_vpc.redis_cluster_vpc.id
-  cidr_block = var.subnet_cidr_blocks[2]
-  availability_zone = var.subnet_azs[2]
-
-  tags = {
-    Name = format("%s-subnet3", var.base_name),
-    Project = format("%s-%s-cluster", var.base_name, var.region),
-    Owner = var.owner
-  }
-}
 
 #### network
 #### Create Internet Gateway
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.redis_cluster_vpc.id
+  vpc_id = aws_vpc.vpc.id
   tags = {
-      Name = format("%s-igw", var.base_name),
-      Project = format("%s-%s-cluster", var.base_name, var.region),
-      Owner = var.owner
+    Name = format("%s-igw", var.base_name),
+    Project = format("%s-%s", var.base_name, var.region),
+    Owner = var.owner
     }
 }
 
-#### Create a custom route table 
-#### (custom route table for the subnet)
+#### Create the default route table
 resource "aws_default_route_table" "route_table" {
-  default_route_table_id = aws_vpc.redis_cluster_vpc.default_route_table_id
+  default_route_table_id = aws_vpc.vpc.default_route_table_id
   route {
       cidr_block = "0.0.0.0/0"
       gateway_id = aws_internet_gateway.igw.id
     }
+
   tags = {
-      Name = format("%s-rt", var.base_name),
-      Project = format("%s-%s-cluster", var.base_name, var.region),
-      Owner = var.owner
-    }
+    Name = format("%s-rt", var.base_name),
+    Project = format("%s-%s", var.base_name, var.region),
+    Owner = var.owner
+  }
 }
 
-#### associate the route table to the subnet.
-resource "aws_route_table_association" "subnet_association1" {
-  subnet_id      = aws_subnet.re_subnet1.id
-  route_table_id = aws_default_route_table.route_table.id
-}
-resource "aws_route_table_association" "subnet_association2" {
-  subnet_id      = aws_subnet.re_subnet2.id
-  route_table_id = aws_default_route_table.route_table.id
-}
-resource "aws_route_table_association" "subnet_association3" {
-  subnet_id      = aws_subnet.re_subnet3.id
+#### Associate the subnets with the default route table
+resource "aws_route_table_association" "subnet_route_table_associations" {
+  for_each = aws_subnet.subnets
+  subnet_id = each.value.id
   route_table_id = aws_default_route_table.route_table.id
 }
