@@ -141,6 +141,7 @@ module "create-cluster" {
   region               = var.region
   re_cluster_username  = var.re_cluster_username
   re_cluster_password  = var.re_cluster_password
+  flash_enabled        = var.flash_enabled
   ### vars pulled from previous modules
   vpc_name             = module.vpc.vpc-name
   re-node-internal-ips = module.nodes.re-data-node-internal-ips

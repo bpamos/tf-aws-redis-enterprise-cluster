@@ -15,6 +15,15 @@ resource "local_file" "dynamic_inventory_ini" {
     filename = "${path.module}/inventories/${var.vpc_name}_inventory.ini"
 }
 
+
+##### Generate ansible group_vars main.yaml for cluster deployment options
+resource "local_file" "group_vars_main_yaml" {
+    content  = templatefile("${path.module}/main.yaml.tpl", {
+      flash_enabled  = var.flash_enabled
+    })
+    filename = "${path.module}/group_vars/all/main.yaml"
+}
+
 ##### Generate extra_vars.yaml file
 resource "local_file" "extra_vars" {
     content  = templatefile("${path.module}/extra_vars/inventory.yaml.tpl", {
@@ -36,5 +45,6 @@ resource "null_resource" "ansible-run" {
     }
     depends_on = [local_file.dynamic_inventory_ini, 
                   time_sleep.wait_30_seconds, 
-                  local_file.extra_vars]
+                  local_file.extra_vars,
+                  local_file.group_vars_main_yaml]
 }

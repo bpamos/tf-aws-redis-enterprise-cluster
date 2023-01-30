@@ -20,6 +20,7 @@ ssh_key_name =
 ssh_key_path =
 
 #### User Input Required
+#### If you do not have one already, go get a domain name on Route53
 #### DNS hosted zone id (find value in R53 hosted zones)
 ### navigate to Route 53 in the AWS console, click hosted zones, 
 ### find hosted zone "domain name" of interest, use its "hosted zone ID" (fake example: dns_hosted_zone_id="Z903232kljadfdk")
@@ -69,11 +70,17 @@ test-node-count = 1
 #### (FAKE example (update the x.x.xx with the Redis Software version!): re_download_url = "https://s3.amazonaws.com/redis-enterprise-software-downloads/x.x.xx/redislabs-x.x.xx-68-bionic-amd64.tar")
 re_download_url =
 
+#### RE cluster options
+#### Do you want a Redis on Flash enabled cluster, if so, true, else, false
+#### example: flash_enabled = false
+flash_enabled = false
+
 #### how many data nodes, 3 minimum, (odd numbers required)
 #### example: data-node-count = 3
 data-node-count = 3
 
 ##### redis enterprise software instance type
+##### (if redis on flash (rof) is enabled it is suggested to use i3.2xlarge)
 ##### example: re_instance_type = "t2.xlarge"
 re_instance_type = "t2.xlarge"
 

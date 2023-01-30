@@ -5,4 +5,4 @@ persistent_path: /var/opt/redislabs/persist
 ephemeral_path: /var/opt/redislabs/tmp 
 pause_seconds: 15
 flash_path: /var/opt/redislabs/flash
-flash_enabled: false
+flash_enabled: ${flash_enabled}

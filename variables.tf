@@ -65,6 +65,12 @@ variable "re_download_url" {
   default     = ""
 }
 
+variable "flash_enabled" {
+  description = "Redis on Flash cluster"
+  default     = "false"
+}
+
+
 variable "data-node-count" {
   description = "number of data nodes"
   default     = 3
