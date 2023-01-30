@@ -19,7 +19,7 @@ Create an optional Prometheus and Grafana node configured to the Redis Enterprie
 
 ### !!!! Requirements !!!
 * Redis Enterprise Software (**Ubuntu 18.04**)
-* R53 DNS_hosted_zone_id
+* R53 DNS_hosted_zone_id *(if you do not have one already, go get a domain name on Route53)*
 * aws access key and secret key
 * an **AWS generated** SSH key for the region you are creating the cluster
     - *you must chmod 400 the key before use*
