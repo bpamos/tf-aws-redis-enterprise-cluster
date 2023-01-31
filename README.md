@@ -15,7 +15,8 @@ Create an optional Prometheus and Grafana node configured to the Redis Enterprie
 * Test node with Redis and Memtier installed
 * Prometheus and Grafana node configured for advanced monitoring
 * DNS (NS and A records for Redis Enterprise nodes)
-* Create and Join Redis Enterprise cluster 
+* Create and Join Redis Enterprise cluster
+    * cluster creation options: redis on ram, redis on flash, and or rack zone awarness
 
 ### !!!! Requirements !!!
 * Redis Enterprise Software (**Ubuntu 18.04**)
