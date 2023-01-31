@@ -18,8 +18,9 @@ resource "local_file" "dynamic_inventory_ini" {
 
 ##### Generate ansible group_vars main.yaml for cluster deployment options
 resource "local_file" "group_vars_main_yaml" {
-    content  = templatefile("${path.module}/main.yaml.tpl", {
+    content  = templatefile("${path.module}//group_vars/all/main.yaml.tpl", {
       flash_enabled  = var.flash_enabled
+      rack_awareness = var.rack_awareness
     })
     filename = "${path.module}/group_vars/all/main.yaml"
 }

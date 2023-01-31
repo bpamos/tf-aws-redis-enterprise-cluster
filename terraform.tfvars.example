@@ -75,6 +75,10 @@ re_download_url =
 #### example: flash_enabled = false
 flash_enabled = false
 
+#### Do you want a Rack Zone Aware enabled cluster, if so, true, else, false
+#### example: rack_awareness = false
+rack_awareness = false
+
 #### how many data nodes, 3 minimum, (odd numbers required)
 #### example: data-node-count = 3
 data-node-count = 3

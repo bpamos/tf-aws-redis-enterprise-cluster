@@ -39,8 +39,14 @@ variable "re-data-node-eip-public-dns" {
 
 variable "flash_enabled" {
   description = "Redis on Flash cluster"
-  default     = "false"
+  default     = false
 }
+
+variable "rack_awareness" {
+  description = "Rack zone aware cluster"
+  default     = false
+}
+
 
 ############# Create RE Cluster Variables
 
