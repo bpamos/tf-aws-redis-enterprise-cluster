@@ -88,9 +88,9 @@ output "re_ami" {
 }
 
 
-########### Test Node Module
-#### Create Test nodes
-#### Ansible playbooks configure Test node with Redis and Memtier
+########## Test Node Module
+### Create Test nodes
+### Ansible playbooks configure Test node with Redis and Memtier
 ######## IF YOU DONT WANT A TESTER NODE, Comment out this module and its outputs
 module "tester-nodes" {
     source             = "./modules/tester-nodes"
@@ -142,6 +142,7 @@ module "create-cluster" {
   re_cluster_username  = var.re_cluster_username
   re_cluster_password  = var.re_cluster_password
   flash_enabled        = var.flash_enabled
+  rack_awareness       = var.rack_awareness
   ### vars pulled from previous modules
   vpc_name             = module.vpc.vpc-name
   re-node-internal-ips = module.nodes.re-data-node-internal-ips
@@ -165,8 +166,8 @@ output "re-cluster-password" {
   value = module.create-cluster.re-cluster-password
 }
 
-######### Prometheus and Grafana Module
-#### configure prometheus and grafana on new node
+######## Prometheus and Grafana Module
+### configure prometheus and grafana on new node
 ######## IF YOU DONT WANT A GRAFANA NODE, Comment out this module and its outputs
 module "prometheus-node" {
     source             = "./modules/prometheus-node"

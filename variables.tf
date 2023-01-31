@@ -67,7 +67,12 @@ variable "re_download_url" {
 
 variable "flash_enabled" {
   description = "Redis on Flash cluster"
-  default     = "false"
+  default     = false
+}
+
+variable "rack_awareness" {
+  description = "Rack zone aware cluster"
+  default     = false
 }
 
 
