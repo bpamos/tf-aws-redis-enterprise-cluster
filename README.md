@@ -1,6 +1,7 @@
 # tf-aws-redis-enterprise-cluster
 Create a Redis Enterprise Cluster from scratch on AWS using Terraform.
 Redis Enterprise Cluster of 3+ nodes accessible via FQDN, username, and password.
+Cluster creation options to create either Redis on RAM, Redis on Flash, and or Rack Zone Aware cluster.
 
 Create an optional test node or nodes with Redis and Memtier installed.
 
@@ -16,7 +17,7 @@ Create an optional Prometheus and Grafana node configured to the Redis Enterprie
 * Prometheus and Grafana node configured for advanced monitoring
 * DNS (NS and A records for Redis Enterprise nodes)
 * Create and Join Redis Enterprise cluster
-    * cluster creation options: redis on ram, redis on flash, and or rack zone awarness
+    * cluster creation options: redis on ram, redis on flash, and or rack zone awareness
 
 ### !!!! Requirements !!!
 * Redis Enterprise Software (**Ubuntu 18.04**)
