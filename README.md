@@ -5,7 +5,7 @@ Cluster creation options to create either Redis on RAM, Redis on Flash, and or R
 
 Create an optional test node or nodes with Redis and Memtier installed.
 
-Create an optional Prometheus and Grafana node configured to the Redis Enterprie cluster for advanced monitoring at the cluster, node, and database levels.
+ Optional: Configure Prometheus and Grafana on the Test node for advanced monitoring at the Redis Enterprise cluster, node, and database levels.
 
 * Example of deployment: (user can choose any number of RE nodes and any number of tester nodes to deploy)
 ![Alt text](image/RE-TF-Deploy.jpg?raw=true "Title")
@@ -47,6 +47,7 @@ Create an optional Prometheus and Grafana node configured to the Redis Enterprie
     ```
     # create virtual environment
     python3 -m venv ./venv
+    source ./venv/bin/activate
     # Check if you have pip
     python3 -m pip -V
     # Install ansible and check if it is in path
@@ -74,7 +75,7 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     - `node module` (creates and provisions ubuntu 18.04 vms with RE software installed)
     - `tester-nodes` (creates test nodes with Redis and Memtier installed)
         - *If you do not want to provision tester nodes, comment this module out*
-    - `prometheus-node` (creates prometheus node with prometheus and grafana configured for advanced monitoring on the Redis Enterprise Cluster)
+    - `prometheus-node` (configures the test node with prometheus and grafana for advanced monitoring on the Redis Enterprise Cluster)
         - *If you do not want to provision the prometheus and grafana node, comment this module out*
     - `dns module` (creates R53 DNS with NS record and A records), 
     - `create-cluster module` (uses ansible to create and join the RE cluster via REST API)
@@ -122,6 +123,7 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     ```bash
     # create virtual environment
     python3 -m venv ./venv
+    source ./venv/bin/activate
     # ensure ansible is in path
     ansible --version
     # run terraform commands
