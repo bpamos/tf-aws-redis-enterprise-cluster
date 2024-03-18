@@ -1,129 +1,25 @@
-#### Provider variables
-variable "region" {
-    description = "AWS region"
-}
+#### Required Variables
 
-variable "aws_creds" {
-    description = "Access key and Secret key for AWS [Access Keys, Secret Key]"
-}
-
-#### Important variables
-variable "ssh_key_name" {
-    description = "name of ssh key to be added to instance"
-}
-
-variable "ssh_key_path" {
-    description = "name of ssh key to be added to instance"
-}
 
 variable "owner" {
     description = "owner tag name"
 }
 
 #### VPC
-variable "base_name" {
-    description = "base name for resources"
-    default = "redisuser1-tf"
-}
-
 variable "vpc_cidr" {
     description = "vpc-cidr"
-    default = "10.0.0.0/16"
-}
-
-variable "subnet_cidr_blocks" {
-    type = list(any)
-    description = "subnet_cidr_block"
-    default = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24"]
-}
-
-variable "subnet_azs" {
-    type = list(any)
-    description = "subnet availability zone"
-    default = [""]
-}
-
-#### DNS
-variable "dns_hosted_zone_id" {
-    description = "DNS hosted zone Id"
-}
-
-#### Test Instance Variables
-variable "test-node-count" {
-  description = "number of data nodes"
-  default     = 1
-}
-
-variable "node-prefix-tester" {
-  description = "node prefix"
-  default     = "tester"
-}
-
-variable "test_instance_type" {
-    description = "instance type to use. Default: t3.micro"
-    default = "t3.micro"
-}
-
-#### Redis Enterprise Cluster Variables
-variable "re_download_url" {
-  description = "re download url"
-  default     = ""
-}
-
-variable "flash_enabled" {
-  description = "Redis on Flash cluster"
-  default     = false
-}
-
-variable "rack_awareness" {
-  description = "Rack zone aware cluster"
-  default     = false
 }
 
 
-variable "data-node-count" {
-  description = "number of data nodes"
-  default     = 3
+variable "vpc_id" {
+  description = "The ID of the VPC"
 }
 
-variable "ena-support" {
-  description = "choose AMIs that have ENA support enabled"
-  default     = true
+
+variable "vpc_name" {
+  description = "The VPC Project Name tag"
 }
 
-variable "node-prefix-re" {
-  description = "node prefix"
-  default     = "re"
-}
-
-variable "re_instance_type" {
-    description = "re instance type"
-    default     = "t2.xlarge"
-}
-
-variable "node-root-size" {
-  description = "The size of the root volume"
-  default     = "50"
-}
-
-#### EBS volume for persistent and ephemeral storage
-variable "create_ebs_volumes_re" {
-  description = "Whether to create EBS volume or not"
-  type        = bool
-  default     = true
-}
-
-variable "create_ebs_volumes_tester" {
-  description = "Whether to create EBS volume or not"
-  type        = bool
-  default     = false
-}
-
-#### EBS volume for persistent and ephemeral storage
-variable "re-volume-size" {
-  description = "The size of the ephemeral and persistent volumes to attach"
-  default     = "150"
-}
 
 #### Security
 variable "open-nets" {
@@ -302,28 +198,13 @@ variable "internal-rules" {
       protocol  = "udp"
       comment   = "Let UDP out to the VPC"
     },
-    {
-      type      = "ingress"
-      from_port = "8080"
-      to_port   = "8080"
-      protocol  = "tcp"
-      comment   = "Allow for host check between nodes (also for grafana access)"
-    },
-    {
-      type      = "ingress"
-      from_port = "9090"
-      to_port   = "9090"
-      protocol  = "tcp"
-      comment   = "For Grafana Access"
-    },
-    {
-      type      = "ingress"
-      from_port = "3000"
-      to_port   = "3000"
-      protocol  = "tcp"
-      comment   = "For Grafana Access"
-    }
-    
+    #    {
+    #      type      = "ingress"
+    #      from_port = "8080"
+    #      to_port   = "8080"
+    #      protocol  = "tcp"
+    #      comment   = "Allow for host check between nodes"
+    #    },
   ]
 }
 
@@ -352,75 +233,5 @@ variable "external-rules" {
       protocol  = "udp"
       cidr      = ["0.0.0.0/0"]
     }
-    
   ]
-}
-
-####### Prometheus Node Variables
-
-variable "prometheus_instance_type" {
-    description = "instance type to use. Default: t3.micro"
-    default = "t3.micro"
-}
-
-
-####### Node Output Variables
-#### used in additional modules
-
-variable "vpc_security_group_ids" {
-    type = list
-    description = "."
-    default = []
-}
-
-variable "re_ami" {
-    description = "."
-    default = ""
-}
-
-variable "test-node-eips" {
-    type = list
-    description = "."
-    default = []
-}
-
-
-####### Create Cluster Variables
-####### Node and DNS outputs used to Create Cluster
-variable "dns_fqdn" {
-    description = "."
-    default = ""
-}
-
-variable "re-node-internal-ips" {
-    type = list
-    description = "."
-    default = []
-}
-
-variable "re-node-eip-ips" {
-    type = list
-    description = "."
-    default = []
-}
-
-variable "re-data-node-eip-public-dns" {
-    type = list
-    description = "."
-    default = []
-}
-
-############# Create RE Cluster Variables
-
-#### Cluster Inputs
-#### RE Cluster Username
-variable "re_cluster_username" {
-    description = "redis enterprise cluster username"
-    default     = "admin@admin.com"
-}
-
-#### RE Cluster Password
-variable "re_cluster_password" {
-    description = "redis enterprise cluster password"
-    default     = "admin"
 }

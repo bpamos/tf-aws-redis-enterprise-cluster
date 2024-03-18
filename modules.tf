@@ -39,81 +39,95 @@ output "vpc_name" {
   value = module.vpc.vpc-name
 }
 
-########### Node Module
-#### Create RE nodes
-#### Ansible playbooks configure and install RE software on nodes
-module "nodes" {
-    source             = "./modules/nodes"
+########### Security Group Module
+#### create a security group
+module "security-group" {
+    source             = "./modules/security-group"
+
     owner              = var.owner
-    region             = var.region
     vpc_cidr           = var.vpc_cidr
-    subnet_azs         = var.subnet_azs
-    ssh_key_name       = var.ssh_key_name
-    ssh_key_path       = var.ssh_key_path
-    re_download_url    = var.re_download_url
-    data-node-count    = var.data-node-count
-    re_instance_type   = var.re_instance_type
-    re-volume-size     = var.re-volume-size
     allow-public-ssh   = var.allow-public-ssh
     open-nets          = var.open-nets
     ### vars pulled from previous modules
     ## from vpc module outputs 
-    ##(these do not need to be varibles in the variables.tf outside the modules folders
-    ## since they are refrenced from the other module, but they need to be variables 
-    ## in the variables.tf inside the nodes module folder )
     vpc_name           = module.vpc.vpc-name
-    vpc_subnets_ids    = module.vpc.subnet-ids
     vpc_id             = module.vpc.vpc-id
+
+    depends_on = [
+      module.vpc
+    ]
 }
 
-#### Node Outputs to use in future modules
-output "re-data-node-eips" {
-  value = module.nodes.re-data-node-eips
+output "aws_security_group_id" {
+  description = "aws security group"
+  value = module.security-group.aws_security_group_id
 }
 
-output "re-data-node-internal-ips" {
-  value = module.nodes.re-data-node-internal-ips
-}
+####################################
+########### Node Redis Enterprise Module
+#### Create the nodes that will be used for Redis Enterprise
+#### Just create the nodes and associated infra.
+#### configure them and install RE in the config module.
+module "nodes-re" {
+    source             = "./modules/nodes"
 
-output "re-data-node-eip-public-dns" {
-  value = module.nodes.re-data-node-eip-public-dns
-}
-
-output "vpc_security_group_ids" {
-  value = module.nodes.vpc_security_group_ids
-}
-
-output "re_ami" {
-  value = module.nodes.re_ami
-}
-
-
-########## Test Node Module
-### Create Test nodes
-### Ansible playbooks configure Test node with Redis and Memtier
-######## IF YOU DONT WANT A TESTER NODE, Comment out this module and its outputs
-module "tester-nodes" {
-    source             = "./modules/tester-nodes"
     owner              = var.owner
     region             = var.region
     vpc_cidr           = var.vpc_cidr
     subnet_azs         = var.subnet_azs
     ssh_key_name       = var.ssh_key_name
     ssh_key_path       = var.ssh_key_path
-    test_instance_type = var.test_instance_type
-    test-node-count    = var.test-node-count #if you want a tester node, enter 1 or greater, else 0
+    node-count         = var.data-node-count
+    ec2_instance_type  = var.re_instance_type
+    node-prefix        = var.node-prefix-re
+    ebs-volume-size    = var.re-volume-size
+    create_ebs_volumes = var.create_ebs_volumes_re
     ### vars pulled from previous modules
+    security_group_id  = module.security-group.aws_security_group_id
+    ## from vpc module outputs 
     vpc_name           = module.vpc.vpc-name
     vpc_subnets_ids    = module.vpc.subnet-ids
     vpc_id             = module.vpc.vpc-id
-    vpc_security_group_ids = module.nodes.vpc_security_group_ids
-    re_ami             = module.nodes.re_ami
 
-    depends_on = [module.vpc, module.nodes]
+    depends_on = [
+      module.vpc,
+      module.security-group
+    ]
 }
 
-output "test-node-eips" {
-  value = module.tester-nodes.test-node-eips
+#### Node Outputs to use in future modules
+output "re-data-node-eips" {
+  value = module.nodes-re.node-eips
+}
+
+output "re-data-node-internal-ips" {
+  value = module.nodes-re.node-internal-ips
+}
+
+output "re-data-node-eip-public-dns" {
+  value = module.nodes-re.node-eip-public-dns
+}
+
+#####################################
+
+#### Configure Redis Enterprise nodes
+#### Ansible playbooks configure and install RE software on nodes
+module "nodes-config-re" {
+    source             = "./modules/nodes-config-re"
+
+    ssh_key_name       = var.ssh_key_name
+    ssh_key_path       = var.ssh_key_path
+    re_download_url    = var.re_download_url
+    data-node-count    = var.data-node-count
+    ### vars pulled from previous modules
+    ## from vpc module outputs 
+    vpc_name           = module.vpc.vpc-name
+    vpc_id             = module.vpc.vpc-id
+    aws_eips           = module.nodes-re.node-eips
+
+    depends_on = [
+      module.nodes-re
+    ]
 }
 
 ########### DNS Module
@@ -121,11 +135,12 @@ output "test-node-eips" {
 #### Currently using existing dns hosted zone
 module "dns" {
     source             = "./modules/dns"
+
     dns_hosted_zone_id = var.dns_hosted_zone_id
     data-node-count    = var.data-node-count
     ### vars pulled from previous modules
     vpc_name           = module.vpc.vpc-name
-    re-data-node-eips  = module.nodes.re-data-node-eips
+    re-data-node-eips  = module.nodes-re.node-eips
 }
 
 #### dns FQDN output used in future modules
@@ -134,9 +149,10 @@ output "dns-ns-record-name" {
 }
 
 ############## RE Cluster
-#### Ansible Playbook runs locally to create the cluster
+#### Ansible Playbook runs locally to create the cluster A
 module "create-cluster" {
   source               = "./modules/re-cluster"
+
   ssh_key_path         = var.ssh_key_path
   region               = var.region
   re_cluster_username  = var.re_cluster_username
@@ -145,12 +161,16 @@ module "create-cluster" {
   rack_awareness       = var.rack_awareness
   ### vars pulled from previous modules
   vpc_name             = module.vpc.vpc-name
-  re-node-internal-ips = module.nodes.re-data-node-internal-ips
-  re-node-eip-ips      = module.nodes.re-data-node-eips
-  re-data-node-eip-public-dns   = module.nodes.re-data-node-eip-public-dns
+  re-node-internal-ips = module.nodes-re.node-internal-ips
+  re-node-eip-ips      = module.nodes-re.node-eips
+  re-data-node-eip-public-dns   = module.nodes-re.node-eip-public-dns
   dns_fqdn             = module.dns.dns-ns-record-name
   
-  depends_on           = [module.vpc, module.nodes, module.dns]
+  depends_on           = [
+    module.vpc, 
+    module.nodes-re, 
+    module.nodes-config-re, 
+    module.dns]
 }
 
 #### Cluster Outputs
@@ -166,28 +186,98 @@ output "re-cluster-password" {
   value = module.create-cluster.re-cluster-password
 }
 
-######## Prometheus and Grafana Module
-### configure prometheus and grafana on new node
-######## IF YOU DONT WANT A GRAFANA NODE, Comment out this module and its outputs
-module "prometheus-node" {
-    source             = "./modules/prometheus-node"
+
+####################################
+########### Node Module
+#### Create Test nodes
+#### Create the test nodes and their associated infra
+#### configure them and install RE in the config module.
+module "nodes-tester" {
+    source             = "./modules/nodes"
+
     owner              = var.owner
     region             = var.region
     vpc_cidr           = var.vpc_cidr
     subnet_azs         = var.subnet_azs
     ssh_key_name       = var.ssh_key_name
     ssh_key_path       = var.ssh_key_path
-    prometheus_instance_type = var.prometheus_instance_type
+    node-count         = var.test-node-count
+    node-prefix        = var.node-prefix-tester
+    ec2_instance_type  = var.test_instance_type
+    #ebs-volume-size    = var.re-volume-size
+    create_ebs_volumes = var.create_ebs_volumes_tester
     ### vars pulled from previous modules
+    security_group_id  = module.security-group.aws_security_group_id
+    ## from vpc module outputs 
     vpc_name           = module.vpc.vpc-name
     vpc_subnets_ids    = module.vpc.subnet-ids
     vpc_id             = module.vpc.vpc-id
-    vpc_security_group_ids = module.nodes.vpc_security_group_ids
-    re_ami             = module.nodes.re_ami
+
+    depends_on = [
+      module.vpc,
+      module.security-group
+    ]
+}
+
+#### Node Outputs to use in future modules
+output "test-node-eips" {
+  value = module.nodes-tester.node-eips
+}
+
+output "test-node-internal-ips" {
+  value = module.nodes-tester.node-internal-ips
+}
+
+output "test-node-eip-public-dns" {
+  value = module.nodes-tester.node-eip-public-dns
+}
+
+
+#### Create Test nodes
+#### Ansible playbooks configure Test node with Redis and Memtier
+module "nodes-config-redisoss" {
+    source             = "./modules/nodes-config-redisoss"
+
+    ssh_key_name       = var.ssh_key_name
+    ssh_key_path       = var.ssh_key_path
+    test_instance_type = var.test_instance_type
+    test-node-count    = var.test-node-count
+    ### vars pulled from previous modules
+    ## from vpc module outputs 
+    vpc_name           = module.vpc.vpc-name
+    vpc_id             = module.vpc.vpc-id
+    aws_eips           = module.nodes-tester.node-eips
+
+    depends_on = [
+      module.nodes-tester
+    ]
+}
+
+
+######## Prometheus and Grafana Module
+### configure prometheus and grafana on TEST node
+######## IF YOU DONT WANT A GRAFANA ON THE NODE, Comment out this module and its outputs
+module "prometheus-node" {
+    source             = "./modules/prometheus-node"
+    
+    ssh_key_name       = var.ssh_key_name
+    ssh_key_path       = var.ssh_key_path
+    test-node-count    = var.test-node-count
+    ### vars pulled from previous modules
+    ## from vpc module outputs 
+    vpc_name           = module.vpc.vpc-name
+    vpc_id             = module.vpc.vpc-id
+    aws_eips           = module.nodes-tester.node-eips
+    
+    prometheus_instance_type = var.test_instance_type
     dns_fqdn           = module.dns.dns-ns-record-name
 
 
-    depends_on = [module.vpc, module.nodes, module.dns, module.create-cluster]
+    depends_on = [module.vpc, 
+                  module.nodes-tester,
+                  module.nodes-config-redisoss,
+                  module.dns, 
+                  module.create-cluster]
 }
 
 #### dns FQDN output used in future modules

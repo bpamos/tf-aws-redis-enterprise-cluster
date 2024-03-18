@@ -1,22 +1,22 @@
-#### Create & associate EIP with RE
+#### Create & associate EIP with RE and Test Nodes
 
 #### RE Nodes EIP
-resource "aws_eip" "re_cluster_instance_eip" {
-  count = var.data-node-count
+resource "aws_eip" "instance_eip" {
+  count = var.node-count
   network_border_group = var.region
-  vpc      = true
+  domain     = "vpc"
 
   tags = {
-      Name = format("%s-eip-%s", var.vpc_name, count.index+1),
+      Name = format("%s-%s-eip-%s", var.vpc_name, var.node-prefix, count.index+1),
       Owner = var.owner
   }
 
 }
 
 #### RE Node Elastic IP association
-resource "aws_eip_association" "re-eip-assoc" {
-  count = var.data-node-count
-  instance_id   = element(aws_instance.re_cluster_instance.*.id, count.index)
-  allocation_id = element(aws_eip.re_cluster_instance_eip.*.id, count.index)
-  depends_on    = [aws_instance.re_cluster_instance, aws_eip.re_cluster_instance_eip]
+resource "aws_eip_association" "eip-assoc" {
+  count = var.node-count
+  instance_id   = element(aws_instance.instance.*.id, count.index)
+  allocation_id = element(aws_eip.instance_eip.*.id, count.index)
+  depends_on    = [aws_instance.instance, aws_eip.instance_eip]
 }

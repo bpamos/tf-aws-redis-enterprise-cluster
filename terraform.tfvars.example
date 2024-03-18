@@ -88,6 +88,11 @@ data-node-count = 3
 ##### example: re_instance_type = "t2.xlarge"
 re_instance_type = "t2.xlarge"
 
+##### EBS volume creation yes or no, true false
+create_ebs_volumes_re = true
+
+create_ebs_volumes_tester = false
+
 ##### EBS volume for persistent and ephemeral storage
 #### example: re-volume-size = 150
 re-volume-size = "50"
