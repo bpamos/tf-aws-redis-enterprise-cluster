@@ -1,24 +1,11 @@
 #### Required Variables
 
-variable "region" {
-    description = "AWS region"
-}
-
 variable "ssh_key_name" {
     description = "name of ssh key to be added to instance"
 }
 
 variable "ssh_key_path" {
     description = "name of ssh key to be added to instance"
-}
-
-variable "owner" {
-    description = "owner tag name"
-}
-
-#### VPC
-variable "vpc_cidr" {
-    description = "vpc-cidr"
 }
 
 variable "vpc_id" {
@@ -29,15 +16,18 @@ variable "vpc_name" {
   description = "The VPC Project Name tag"
 }
 
-variable "vpc_subnets_ids" {
-  type        = list(any)
-  description = "The list of subnets available to the VPC"
+
+#### Test Instance Variables
+
+#### instance type to use for test node with redis and memtier installed on it
+variable "test-node-count" {
+  description = "number of data nodes"
+  default     = 1
 }
 
-variable "subnet_azs" {
-    type = list(any)
-    description = "subnet availability zone"
-    default = [""]
+variable "aws_eips" {
+  description = "list of eips"
+  default     = []
 }
 
 #### prometheus Instance Variables
@@ -46,21 +36,6 @@ variable "prometheus_instance_type" {
     description = "instance type to use. Default: t3.micro"
     default = "t3.micro"
 }
-
-####### Node Output Variables
-#### pulled from node module
-
-variable "vpc_security_group_ids" {
-    type = list
-    description = "."
-    default = []
-}
-
-variable "re_ami" {
-    description = "."
-    default = ""
-}
-
 
 variable "dns_fqdn" {
   description = "dns_fqdn"

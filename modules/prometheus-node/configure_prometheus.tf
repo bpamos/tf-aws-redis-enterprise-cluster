@@ -5,44 +5,20 @@
 #### otherwise it can run to fast, not find the inventory file and fail or hang
 resource "time_sleep" "wait_30_seconds_prometheus" {
   create_duration = "30s"
-  depends_on = [aws_instance.prometheus_node, 
-                aws_eip_association.prometheus_eip_assoc, 
-                local_file.inventory_setup_prometheus, 
-                local_file.ssh-setup-prometheus,
-                local_file.prometheus, 
-                local_file.docker_compose]
+  depends_on = [local_file.inventory_setup_prometheus, 
+                local_file.ssh-setup-prometheus]
 }
 
-# remote-config waits till the node is accessible
-resource "null_resource" "remote_config_prometheus" {
-  count = 1
-  provisioner "remote-exec" {
-        inline = ["sudo apt update > /dev/null"]
-
-        connection {
-            type = "ssh"
-            user = "ubuntu"
-            private_key = file(var.ssh_key_path)
-            host = element(aws_eip.prometheus_node_eip.*.public_ip, count.index)
-        }
-    }
-
-    depends_on = [aws_instance.prometheus_node, 
-                aws_eip_association.prometheus_eip_assoc, 
-                local_file.inventory_setup_prometheus, 
-                local_file.ssh-setup-prometheus,
-                time_sleep.wait_30_seconds_prometheus]
-}
 
 #### Generate Ansible Inventory for the node
 resource "local_file" "inventory_setup_prometheus" {
     count    = 1
     content  = templatefile("${path.module}/ansible/inventories/inventory_prometheus.tpl", {
-        host_ip  = element(aws_eip.prometheus_node_eip.*.public_ip, count.index)
+        host_ip  = var.aws_eips[0]
         vpc_name = var.vpc_name
     })
     filename = "/tmp/${var.vpc_name}_prometheus_node_${count.index}.ini"
-  depends_on = [aws_instance.prometheus_node, aws_eip_association.prometheus_eip_assoc]
+
 }
 
 #### Generate ansible.cfg file
@@ -51,7 +27,7 @@ resource "local_file" "ssh-setup-prometheus" {
         vpc_name = var.vpc_name
     })
     filename = "/tmp/${var.vpc_name}_prometheus_node.cfg"
-  depends_on = [aws_instance.prometheus_node, aws_eip_association.prometheus_eip_assoc]
+
 }
 
 ################ configure prometheus and docker on node
@@ -78,7 +54,7 @@ resource "null_resource" "ansible_run_prometheus" {
   provisioner "local-exec" {
     command = "ansible-playbook ${path.module}/ansible/playbooks/playbook_prometheus_node.yaml --private-key ${var.ssh_key_path} -i /tmp/${var.vpc_name}_prometheus_node_${count.index}.ini"
   }
-  depends_on = [null_resource.remote_config_prometheus,
+  depends_on = [
                 time_sleep.wait_30_seconds_prometheus,
                 local_file.prometheus, 
                 local_file.docker_compose]
@@ -89,8 +65,8 @@ resource "null_resource" "ansible_run_prometheus" {
 #### Generate prometheus_datasource file
 resource "local_file" "prometheus_datasource" {
     content  = templatefile("${path.module}/ansible/roles/grafana-datasource/defaults/main.yml.tpl", {
-        grafana_url = format("http://%s:3000", aws_eip.prometheus_node_eip[0].public_ip)
-        prometheus_url = format("http://%s:9090", aws_eip.prometheus_node_eip[0].public_ip)
+        grafana_url = format("http://%s:3000", var.aws_eips[0])
+        prometheus_url = format("http://%s:9090", var.aws_eips[0])
     })
     filename = "${path.module}/ansible/roles/grafana-datasource/defaults/main.yml"
 }
@@ -98,8 +74,7 @@ resource "local_file" "prometheus_datasource" {
 
 resource "time_sleep" "wait_grafana" {
   create_duration = "15s"
-  depends_on = [aws_instance.prometheus_node, 
-                aws_eip_association.prometheus_eip_assoc, 
+  depends_on = [
                 local_file.inventory_setup_prometheus, 
                 local_file.ssh-setup-prometheus,
                 local_file.prometheus, 
@@ -141,11 +116,10 @@ resource "local_file" "save_grafana_node_to_tmp" {
     filename = "/tmp/node.json"
 }
 
-
 #### Generate grafana dashboard yaml
 resource "local_file" "playbook_grafana_yaml" {
     content  = templatefile("${path.module}/ansible/playbooks/playbook_grafana_dashboard.yaml.tpl", {
-        grafana_url = format("http://%s:3000", aws_eip.prometheus_node_eip[0].public_ip)
+        grafana_url = format("http://%s:3000", var.aws_eips[0])
     })
     filename = "${path.module}/ansible/playbooks/playbook_grafana_dashboard.yaml"
   depends_on = [time_sleep.wait_grafana, local_file.prometheus_datasource]
