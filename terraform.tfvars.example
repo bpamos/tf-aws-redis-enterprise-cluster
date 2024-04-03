@@ -101,7 +101,7 @@ re-volume-size = "50"
 ##### example: allow-public-ssh = 1
 allow-public-ssh = 1
 
-##### explanation...
+##### permits unrestricted access within the specified VPC CIDR block.
 ##### example: open-nets = ["10.0.0.0/16"]
 open-nets = ["10.0.0.0/16"]
 
