@@ -8,6 +8,11 @@
 
   vars:
     deb_packages:
+      - jq
+      - tree
+      - sysstat
+      - iputils-ping
+      - libcap2-bin
       - build-essential
       - autoconf
       - automake
@@ -15,13 +20,15 @@
       - libltdl-dev
       - libltdl7
       - libtool
-      - libevent-openssl-2.1-6
-      - libpcre3-dev 
+      - libpcre3-dev
       - libevent-dev
       - pkg-config
       - zlib1g-dev
       - libssl-dev
+      - ntp
       - nginx
+
+      #- libevent-openssl-2.1-6
 
   handlers:
     - name: restart_nginx
@@ -48,8 +55,10 @@
         state: present
 
   tasks:
-    - name: load vars
-      include_vars: default.yaml
+    - name: Install Packages
+      package:
+        name: "{{ deb_packages }}"
+        
     - name: create redis user
       user:
         name: redis
