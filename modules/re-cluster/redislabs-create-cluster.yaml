@@ -7,3 +7,7 @@
   serial: 1
   roles:
      - create_cluster
+  handlers:
+    - name: reload supervisor
+      shell: | 
+        /opt/redislabs/bin/supervisorctl reload

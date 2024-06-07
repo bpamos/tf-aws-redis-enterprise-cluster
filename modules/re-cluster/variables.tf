@@ -63,3 +63,14 @@ variable "re_cluster_password" {
     default     = "admin"
 }
 
+################# Envoy concurrency settings
+
+variable "update_envoy_concurrency" {
+  type = bool
+  default = false
+}
+
+variable "envoy_concurrency_setting" {
+  type = number
+  default = 2
+}

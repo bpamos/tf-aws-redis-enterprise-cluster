@@ -1,4 +1,3 @@
----
 # This task is to setup/config Redis Enterprise via the REST API.
 #
 
@@ -16,17 +15,17 @@
   set_fact:
     internal_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   when: internal_ip is not defined
-  
+
 - name: setting external IP to {{ internal_ip }}
   set_fact:
     external_ip: "{{ internal_ip }}"
   when: external_ip is not defined
-  
+
 - name: setting master internal IP to specified internal IP
   set_fact:
     master_ip: "{{ hostvars[master_host].internal_ip }}"
   when: hostvars[master_host].internal_ip is defined
-  
+
 - name: setting master internal IP to {{ inventory_hostname }}
   set_fact:
     master_ip: "{{ master_host }}"
@@ -63,7 +62,7 @@
   debug:
     msg: 'Creating a cluster with rack awareness...'
   when:
-    - rack_awareness
+  - rack_awareness
 
 - name: Creating Cluster for RedisLabs via REST API
   uri:
@@ -78,8 +77,8 @@
     body: "{{ lookup('template','create_cluster.json.j2') }}"
     body_format: json
   when:
-    - i_am_the_master
-    - not cluster_joined
+  - i_am_the_master
+  - not cluster_joined
 
 
 - name: Join Cluster for RedisLabs via REST API
@@ -95,8 +94,8 @@
     body: "{{ lookup('template','join_cluster.json.j2') }}"
     body_format: json
   when:
-    - not i_am_the_master
-    - not cluster_joined
+  - not i_am_the_master
+  - not cluster_joined
 
 - name: checking to see if we've completed bootstrapping
   uri:
@@ -110,7 +109,19 @@
     follow_redirects: all
   register: bootstrap_status
   until: bootstrap_status.json.bootstrap_status.state == 'completed'
-  delay: 10 
+  delay: 10
   retries: 10
   when:
-    - not cluster_joined
+  - not cluster_joined
+
+- name: Update envoy concurrency setting
+  lineinfile:
+    path: //opt/redislabs/config/supervisord.conf
+    regexp: '^command\s*=\s*.*envoy\s*--config-path'
+    line: 'command = %(ENV_bindir)s/run_with_ulimit -n 4096 %(ENV_bindir)s/envoy --concurrency {{ envoy_concurrency_setting }} --config-path %(ENV_confdir)s/envoy.yaml --log-path %(ENV_logdir)s/envoy.log --service-node local-svc-node --service-cluster local-svc-cluster'
+    backrefs: yes
+  notify: reload supervisor
+  when:
+  - update_envoy_concurrency|bool
+
+

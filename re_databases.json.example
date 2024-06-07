@@ -1,0 +1,20 @@
+[
+    {
+        "name": "db1",
+        "authentication_redis_pass": "redis&#1010",
+        "replication": false,
+        "sharding": true,
+        "shards_count": 2,
+        "memory_size": 1073741824,
+        "type": "redis",
+        "oss_cluster": false,
+        "proxy_policy": "all-master-shards",
+        "shards_placement": "sparse",
+        "data_persistence": "aof",
+        "aof_policy": "appendfsync-always",
+        "shard_key_regex": [
+            {"regex": ".*\\{(?<tag>.*)\\}.*"},
+            {"regex": "(?<tag>.*)"}
+        ]
+    }
+]

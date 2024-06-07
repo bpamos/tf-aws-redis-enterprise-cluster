@@ -7,6 +7,7 @@
 #### (fake example: aws_creds = ["myAccesssKeyxjdklfdakf","MySecretKeyxkldkfhadjkfh"]) 
 aws_creds =
 
+
 #### User Input Required
 #### name of ssh key (.pem file) to be added to instance (AWS key pair name)
 #### ie. if your AWS ssh keys name is "my-ssh-key.pem", enter in "my-ssh-key"

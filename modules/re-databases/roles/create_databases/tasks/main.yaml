@@ -1,0 +1,50 @@
+
+- name: Set database endpoint
+  set_fact:
+    bdbs_endpoint: "https://localhost:9443/v1/bdbs"
+
+- name: Read databases JSON file
+  set_fact:
+    re_databases: "{{ lookup('file', '{{databases_json_file}}') | from_json }}"
+
+# # Get all databases
+# - name: Get all databases
+#   uri:
+#     url: "{{ bdbs_endpoint }}"
+#     method: GET
+#     return_content: yes
+#     validate_certs: no
+#     user: "{{ re_username }}"
+#     password: "{{ re_password }}"
+#     force_basic_auth: yes
+#     follow_redirects: all
+#     headers:
+#       cache-control: no-cache
+#   register: bdbs_response_initial
+
+# - name: Filter out existing databases
+#   set_fact:
+#     re_databases: >-
+#       {{
+#         re_databases | reject('selectattr', 'name', 'in', bdbs_response_initial.json | map(attribute='name') | list) | list
+#       }}
+
+
+# Create databases
+- name: Creating database via REST API
+  uri:
+    url: "{{ bdbs_endpoint }}"
+    method: POST
+    user: "{{ re_username }}"
+    password: "{{ re_password }}"
+    force_basic_auth: yes
+    return_content: yes
+    validate_certs: no
+    follow_redirects: all
+    body: "{{ item | to_json }}"
+    body_format: json
+    headers:
+      Content-Type: "application/json"
+  with_items: "{{ re_databases }}"
+  # register: dbs_creation
+  # when: not dbs_created

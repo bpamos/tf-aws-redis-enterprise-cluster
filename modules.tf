@@ -159,6 +159,9 @@ module "create-cluster" {
   re_cluster_password  = var.re_cluster_password
   flash_enabled        = var.flash_enabled
   rack_awareness       = var.rack_awareness
+  update_envoy_concurrency = var.update_envoy_concurrency
+  envoy_concurrency_setting = var.envoy_concurrency_setting
+
   ### vars pulled from previous modules
   vpc_name             = module.vpc.vpc-name
   re-node-internal-ips = module.nodes-re.node-internal-ips
@@ -185,6 +188,24 @@ output "re-cluster-username" {
 output "re-cluster-password" {
   value = module.create-cluster.re-cluster-password
 }
+
+############## RE Databases
+#### Ansible Playbook runs locally to create the databases if set
+module "create-databases" {
+  source               = "./modules/re-databases"
+
+  ssh_key_path         = var.ssh_key_path
+  re_master_node   =  module.nodes-re.node-eip-public-dns[0]
+  re_cluster_username  = var.re_cluster_username
+  re_cluster_password  = var.re_cluster_password
+  re_databases_create  = var.re_databases_create
+  re_databases_json_file  = abspath(var.re_databases_json_file)
+  
+  depends_on           = [
+    module.create-cluster
+    ]
+}
+
 
 
 ####################################
