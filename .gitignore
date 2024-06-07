@@ -33,3 +33,11 @@ override.tf.json
 # example: *tfplan*
 terraform.tfvars
 terraform.lock.hcl
+
+# databases config
+re_databases.json
+
+# ignore dynamically created inventory files
+*.ini
+terraform.txt
+.terraform.lock.hcl

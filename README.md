@@ -34,7 +34,7 @@ Create an optional test node or nodes with Redis and Memtier installed.
 
 #### Prerequisites (detailed instructions)
 1.  Install `aws-cli` on your local machine and run `aws configure` ([link](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)) to set your access and secret key.
-    - If using an aws-cli profile other than `default`, `main.tf` may need to edited under the `provider "aws"` block to reflect the correct `aws-cli` profile.
+    - If using an aws-cli profile other than `default`, update the `aws_profile` variable to reflect the correct `aws-cli` profile.
 2.  Download the `terraform` binary for your operating system ([link](https://www.terraform.io/downloads.html)), and make sure the binary is in your `PATH` environment variable.
     - MacOSX users:
         - (if you see an error saying something about security settings follow these instructions), ([link](https://github.com/hashicorp/terraform/issues/23033))
@@ -117,7 +117,7 @@ There are two important files to understand. `modules.tf` and `terraform.tfvars.
     cp terraform.tfvars.example terraform.tfvars
     ```
 3. Update `terraform.tfvars` variable inputs with your own inputs
-    - Some require user input, some will will use a default value if none is given
+    - Some require user input, some will use a default value if none is given
 4. Now you are ready to go!
     * Open a terminal in VS Code:
     ```bash

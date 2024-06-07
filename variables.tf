@@ -7,6 +7,11 @@ variable "aws_creds" {
     description = "Access key and Secret key for AWS [Access Keys, Secret Key]"
 }
 
+variable "aws_profile" {
+    description = "AWS profile configured in .aws/credentials"
+    default = "default"
+}
+
 #### Important variables
 variable "ssh_key_name" {
     description = "name of ssh key to be added to instance"
@@ -356,6 +361,18 @@ variable "external-rules" {
   ]
 }
 
+#### update envoy concurrency settings to work around a bug in envoy
+
+variable "update_envoy_concurrency" {
+  type = bool
+  default = false
+}
+
+variable "envoy_concurrency_setting" {
+  type = number
+  default = 2
+}
+
 ####### Prometheus Node Variables
 
 variable "prometheus_instance_type" {
@@ -423,4 +440,17 @@ variable "re_cluster_username" {
 variable "re_cluster_password" {
     description = "redis enterprise cluster password"
     default     = "admin"
+}
+
+############# Create RE Databases
+
+#### Create databases flag
+variable "re_databases_create" {
+  description = "Create databases"
+  default     = false
+}
+
+variable "re_databases_json_file" {
+    description = "Array of database objects to create using the RE REST API. Required if re_create_databases is set. (warning: no check if database already exists)"
+    default = "./re_databases.json"
 }
