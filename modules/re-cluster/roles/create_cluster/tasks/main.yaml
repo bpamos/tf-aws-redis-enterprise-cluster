@@ -120,7 +120,7 @@
     regexp: '^command\s*=\s*.*envoy\s*--config-path'
     line: 'command = %(ENV_bindir)s/run_with_ulimit -n 4096 %(ENV_bindir)s/envoy --concurrency {{ envoy_concurrency_setting }} --config-path %(ENV_confdir)s/envoy.yaml --log-path %(ENV_logdir)s/envoy.log --service-node local-svc-node --service-cluster local-svc-cluster'
     backrefs: yes
-  notify: load supervisor
+  notify: reload supervisor
   when:
   - update_envoy_concurrency|bool
 

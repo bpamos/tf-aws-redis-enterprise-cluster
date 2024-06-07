@@ -8,7 +8,6 @@
   roles:
      - create_cluster
   handlers:
-    - name: load supervisor
+    - name: reload supervisor
       shell: | 
-        /opt/redislabs/bin/supervisorctl reread
-        /opt/redislabs/bin/supervisorctl update
+        /opt/redislabs/bin/supervisorctl reload

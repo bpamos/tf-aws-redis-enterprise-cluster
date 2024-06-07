@@ -7,11 +7,6 @@ variable "aws_creds" {
     description = "Access key and Secret key for AWS [Access Keys, Secret Key]"
 }
 
-variable "aws_profile" {
-    description = "AWS profile configured in .aws/credentials"
-    default = "default"
-}
-
 #### Important variables
 variable "ssh_key_name" {
     description = "name of ssh key to be added to instance"
